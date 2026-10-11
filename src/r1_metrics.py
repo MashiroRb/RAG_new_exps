@@ -65,7 +65,7 @@ def main():
         r["adv_count"] = int(r["adv_count"])
 
     summary = []
-    for subset, name in [(rows, "all"), ([r for r in rows if r["adv_count"] > 0], "positive_injection_only")]:
+    for subset, name in [(rows, "all"), ([r for r in rows if int(r["adv_count"]) > 0], "positive_injection_only")]:
         for m in METRICS:
             aucs = []
             rhos = []
