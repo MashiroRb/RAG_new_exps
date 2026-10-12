@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 OUTD = ROOT / "RAG_new_exps" / "results" / "e3"
 SEEDS = [101, 202, 303]
 K = 10
-OMEGA = 1.0
+Q_MID = 0.5
 
 
 def load_queries(domain):
@@ -30,14 +30,14 @@ def asymmetric_equilibrium(c1, c2, eta, omega, rho):
         D = eta * (x1 + x2) + rho
         return [omega * eta * (eta * x2 + rho) / (D * D) - c1 * x1,
                 omega * eta * (eta * x1 + rho) / (D * D) - c2 * x2]
-    sol = root(focs, [0.3, 0.3], method="hybr")
+    sol = root(focs, [0.15, 0.05], method="hybr")
     if not sol.success or min(sol.x) < 0:
         return None
     return sol.x
 
 
 def provider_shares(inj_rows, base_n, offsets):
-    counts = [0] * len(offsets[:-1])
+    counts = [0] * (len(offsets) - 1)
     for row in inj_rows:
         for j, isin in row:
             if isin:
@@ -50,19 +50,11 @@ def provider_shares(inj_rows, base_n, offsets):
     return [c / tot for c in counts] if tot else [0.0] * len(counts)
 
 
-def run_config(corpus_nodes, cache, qvecs, sel_recs, seed, arm, N, m, rho, scale_doc, extra=None):
-    inj = nodes_of(sel_recs)
-    offsets = [0]
-    per_provider_chunks = []
-    for rec in sel_recs:
-        pass
-    index, base_n = build_index(corpus_nodes + inj, cache)
-    q_meas, inj_rows = exposure_of(index, base_n, qvecs, K)
-    row = {"seed": seed, "arm": arm, "N": N, "m": m, "X_docs": len(sel_recs),
-           "X": round(len(sel_recs) / scale_doc, 4), "q_measured": round(q_meas, 4)}
-    if extra:
-        row.update(extra)
-    return row, inj, base_n, inj_rows
+def place(corpus_nodes, cache, qvecs, sel, base_count, K):
+    inj = nodes_of(sel)
+    index, _ = build_index(corpus_nodes + inj, cache)
+    q_meas, inj_rows = exposure_of(index, base_count, qvecs, K)
+    return inj, q_meas, inj_rows
 
 
 def main():
@@ -76,85 +68,78 @@ def main():
     embedder = Embedder(pooling="mean")
     cache = VecCache(embedder)
     corpus_nodes = nodes_of(corpus)
+    base_count = len(corpus_nodes)
     qvecs = embedder.encode(queries)
-    n_prov_total = 8
-    part = len(pool) // n_prov_total
-    provs = [pool[i * part:(i + 1) * part] for i in range(n_prov_total)]
+    omega_star = Q_MID * rho * rho / ((1 - Q_MID) ** 2 * (2 - Q_MID))
     scale_doc = len(pool)
     rows = []
+    print(f"rho={rho:.4f} omega_star={omega_star:.4f}", flush=True)
     for seed in SEEDS:
-        perms = [np.random.default_rng(seed * 100 + i).permutation(len(p)) for i, p in enumerate(provs)]
         for N in [1, 2, 4, 8]:
-            use = provs[:N]
+            part = len(pool) // N
+            provs = [pool[i * part:(i + 1) * part] for i in range(N)]
+            perms = [np.random.default_rng(seed * 100 + i).permutation(len(p)) for i, p in enumerate(provs)]
             for m in [5, 10, 20]:
-                sel = [p[i] for p, pm in zip(use, perms) for i in sorted(pm[:m])]
-                inj = nodes_of(sel)
-                offsets = [0]
-                cnt = 0
-                for p in use:
-                    cnt += len(nodes_of(p[:0]) or [])
-                    cnt_per = sum(1 for rec in sel if False)
-                    break
-                index, base_n = build_index(corpus_nodes + inj, cache)
-                q_meas, inj_rows = exposure_of(index, base_n, qvecs, K)
+                sel = [p[i] for p, pm in zip(provs, perms) for i in sorted(pm[:m])]
+                _, q_meas, _ = place(corpus_nodes, cache, qvecs, sel, base_count, K)
+                X = N * m / scale_doc
                 rows.append({"seed": seed, "arm": "equal_m", "N": N, "m": m,
-                             "X_docs": N * m, "X": round(N * m / scale_doc, 4),
-                             "q_measured": round(q_meas, 4)})
-                print(f"seed {seed} equal N={N} m={m}: q={q_meas:.4f}", flush=True)
-            q0 = solve_brc_q(1.0, OMEGA, N, rho)
-            x_star = q0 * rho / (N * (1 - q0))
-            n_each = int(round(x_star * scale_doc / N))
-            n_each = max(1, min(n_each, part))
-            sel = [p[i] for p, pm in zip(use, perms) for i in sorted(pm[:n_each])]
-            inj = nodes_of(sel)
-            offsets = []
-            acc = 0
-            for p, pm in zip(use, perms):
-                subset = [p[i] for i in sorted(pm[:n_each])]
-                acc += len(nodes_of(subset))
-                offsets.append(acc)
-            index, base_n = build_index(corpus_nodes + inj, cache)
-            q_meas, inj_rows = exposure_of(index, base_n, qvecs, K)
-            shares = provider_shares(inj_rows, base_n, offsets)
-            rows.append({"seed": seed, "arm": "equilibrium_r0", "N": N, "m": n_each,
-                         "X_docs": N * n_each, "X": round(N * n_each / scale_doc, 4),
+                             "X_docs": N * m, "X": round(X, 4),
+                             "q_measured": round(q_meas, 4), "q_pred": round(X / (X + rho), 4)})
+                print(f"seed {seed} equal N={N} m={m}: q={q_meas:.4f} pred={X / (X + rho):.4f}", flush=True)
+            for omega, tag in [(omega_star, "equilibrium_w*"), (1.0, "equilibrium_w1")]:
+                if tag == "equilibrium_w1" and N not in (1, 2):
+                    continue
+                q0 = solve_brc_q(1.0, omega, N, rho)
+                x_j = q0 * rho / (N * (1 - q0)) if q0 > 0 else 0.0
+                n_each = int(round(x_j * scale_doc))
+                capped = n_each > part
+                n_use = min(n_each, part)
+                sel = [p[i] for p, pm in zip(provs, perms) for i in sorted(pm[:n_use])]
+                _, q_meas, _ = place(corpus_nodes, cache, qvecs, sel, base_count, K)
+                rows.append({"seed": seed, "arm": tag, "N": N, "m": n_use,
+                             "X_docs": N * n_use, "X": round(N * n_use / scale_doc, 4),
+                             "q_measured": round(q_meas, 4), "q_pred": round(q0, 4),
+                             "x_star_docs": n_each, "capped": int(capped)})
+                print(f"seed {seed} {tag} N={N}: x*={n_each} used={n_use} capped={capped} q={q_meas:.4f} vs q0={q0:.4f}", flush=True)
+        part2 = len(pool) // 2
+        provs2 = [pool[:part2], pool[part2:2 * part2]]
+        perms2 = [np.random.default_rng(seed * 100 + i).permutation(len(p)) for i, p in enumerate(provs2)]
+        for omega in [0.5, 1.0, 2.0]:
+            q0 = solve_brc_q(1.0, omega, 2, rho)
+            x_j = q0 * rho / (2 * (1 - q0)) if q0 > 0 else 0.0
+            n_each = int(round(x_j * scale_doc))
+            capped = n_each > part2
+            n_use = min(n_each, part2)
+            sel = [provs2[0][i] for i in sorted(perms2[0][:n_use])] + [provs2[1][i] for i in sorted(perms2[1][:n_use])]
+            _, q_meas, _ = place(corpus_nodes, cache, qvecs, sel, base_count, K)
+            rows.append({"seed": seed, "arm": f"omega_{omega}", "N": 2, "m": n_use,
+                         "X_docs": 2 * n_use, "X": round(2 * n_use / scale_doc, 4),
                          "q_measured": round(q_meas, 4), "q_pred": round(q0, 4),
-                         "x_star_docs": n_each,
-                         "share_max": round(max(shares), 4), "share_min": round(min(shares), 4)})
-            print(f"seed {seed} eq N={N}: x*={n_each} q={q_meas:.4f} vs q0={q0:.4f} shares[{max(shares):.2f},{min(shares):.2f}]", flush=True)
-        for om in [0.5, 1.0, 2.0]:
-            q0 = solve_brc_q(1.0, om, 2, rho)
-            x_star = q0 * rho / (2 * (1 - q0)) if q0 > 0 else 0.0
-            n_each = max(1, min(int(round(x_star * scale_doc / 2)), part))
-            sel = [provs[0][i] for i in sorted(perms[0][:n_each])] + [provs[1][i] for i in sorted(perms[1][:n_each])]
-            inj = nodes_of(sel)
-            index, base_n = build_index(corpus_nodes + inj, cache)
-            q_meas, _ = exposure_of(index, base_n, qvecs, K)
-            rows.append({"seed": seed, "arm": f"omega_{om}", "N": 2, "m": n_each,
-                         "X_docs": 2 * n_each, "X": round(2 * n_each / scale_doc, 4),
-                         "q_measured": round(q_meas, 4), "q_pred": round(q0, 4), "x_star_docs": n_each})
-            print(f"seed {seed} omega={om}: x*={n_each} q={q_meas:.4f} vs q0={q0:.4f}", flush=True)
-        sol = asymmetric_equilibrium(0.5, 2.0, 1.0, OMEGA, rho)
+                         "x_star_docs": n_each, "capped": int(capped)})
+            print(f"seed {seed} omega={omega}: x*={n_each} used={n_use} capped={capped} q={q_meas:.4f} vs q0={q0:.4f}", flush=True)
+        sol = asymmetric_equilibrium(0.5, 2.0, 1.0, omega_star, rho)
         if sol is not None:
-            n1 = max(1, min(int(round(sol[0] * scale_doc / 2)), part))
-            n2 = max(1, min(int(round(sol[1] * scale_doc / 2)), part))
-            sel = [provs[0][i] for i in sorted(perms[0][:n1])] + [provs[1][i] for i in sorted(perms[1][:n2])]
-            inj = nodes_of(sel)
-            offsets = [0, len(nodes_of([provs[0][i] for i in sorted(perms[0][:n1])])), len(inj)]
-            index, base_n = build_index(corpus_nodes + inj, cache)
-            q_meas, inj_rows = exposure_of(index, base_n, qvecs, K)
-            shares = provider_shares(inj_rows, base_n, offsets)
+            n1 = max(1, min(int(round(sol[0] * scale_doc)), part2))
+            n2 = max(1, min(int(round(sol[1] * scale_doc)), part2))
+            selA = [provs2[0][i] for i in sorted(perms2[0][:n1])]
+            selB = [provs2[1][i] for i in sorted(perms2[1][:n2])]
+            inj = nodes_of(selA + selB)
+            offsets = [0, len(nodes_of(selA)), len(inj)]
+            index, _ = build_index(corpus_nodes + inj, cache)
+            q_meas, inj_rows = exposure_of(index, base_count, qvecs, K)
+            shares = provider_shares(inj_rows, base_count, offsets)
             rows.append({"seed": seed, "arm": "asymmetric_c(0.5,2)", "N": 2, "m": n1,
                          "X_docs": n1 + n2, "X": round((n1 + n2) / scale_doc, 4),
                          "q_measured": round(q_meas, 4),
                          "share_lowcost": round(shares[0], 4), "share_highcost": round(shares[1], 4),
-                         "x_pred_low_docs": round(sol[0] * scale_doc / 2, 1),
-                         "x_pred_high_docs": round(sol[1] * scale_doc / 2, 1)})
+                         "x_pred_low_docs": round(sol[0] * scale_doc, 1),
+                         "x_pred_high_docs": round(sol[1] * scale_doc, 1)})
             print(f"seed {seed} asym: n=({n1},{n2}) q={q_meas:.4f} shares=({shares[0]:.2f},{shares[1]:.2f})", flush=True)
     with open(OUTD / f"e3_{domain}.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=["seed", "arm", "N", "m", "X_docs", "X", "q_measured", "q_pred",
-                                          "x_star_docs", "share_max", "share_min", "share_lowcost",
-                                          "share_highcost", "x_pred_low_docs", "x_pred_high_docs"])
+                                          "x_star_docs", "capped", "share_lowcost", "share_highcost",
+                                          "x_pred_low_docs", "x_pred_high_docs"])
         w.writeheader()
         w.writerows(rows)
     print("E3 done ->", OUTD)
