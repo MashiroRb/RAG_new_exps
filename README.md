@@ -130,18 +130,23 @@ bash scripts/sync_loop.sh 180
 5. 把全部数据点（曝光 与 注入占比的对应关系）用"曝光 = X 除以（X 加 阻力）"
    的曲线做最小二乘拟合，得到检索阻力的估计值与拟合优度。
 6. 换电动车域重复第 1 到第 5 步（运行命令 python3 src/e0_calibration.py ev）。
+   换球鞋域同理（python3 src/e0_calibration.py shoes）。球鞋域的注入池
+   共 184 条，每家 92 条，查询池 39 条，语料 918 篇，其余流程完全相同。
 
 ### 输出文件与字段
 
-- results/e0/e0_grid_camera.csv、results/e0/e0_grid_ev.csv：逐点原始数据
+- results/e0/e0_grid_camera.csv、results/e0/e0_grid_ev.csv、
+  results/e0/e0_grid_shoes.csv：逐点原始数据
   - seed：随机种子（101、202、303）
   - n_A、n_B：两家各注入的文档条数
   - X：注入占比，即两家合计注入条数除以注入池总量 176
   - exposure：实测曝光，44 条查询上"前 10 条里注入占比"的平均值
   - n_inj_chunks：注入文档实际切成的块数（记录用）
-- results/e0/e0_fit_camera.json、results/e0/e0_fit_ev.json：拟合结论
-  - rho_hat：拟合出的检索阻力（相机域 0.334，电动车域 0.919，说明不同域
-    的真实内容抵抗力差别很大，它是域级属性）
+- results/e0/e0_fit_camera.json、results/e0/e0_fit_ev.json、
+  results/e0/e0_fit_shoes.json：拟合结论
+  - rho_hat：拟合出的检索阻力（相机域 0.334，电动车域 0.919，球鞋域见
+    results/e0/e0_fit_shoes.json，说明不同域的真实内容抵抗力差别很大，
+    它是域级属性）
   - r2：拟合优度（两域都超过 0.96，定律形状成立）
   - mae：平均绝对误差；rmse：均方根误差；n_points：参与拟合的数据点数（87）
 
@@ -493,6 +498,7 @@ git remote 或本机的凭据配置即可，脚本本身不含密钥。
 - 注入池规模有限（每域约 180 条），实验三中理论最优注入量超出
   池子的档位会触发上限截断，结果表以 capped 列标明，解释时
   需按"上限约束下的饱和"处理。
-- 检索阻力按域拟合（相机 0.334、电动车 0.919），跨域不可混用；
+- 检索阻力按域拟合（相机 0.334、电动车 0.919、球鞋域见
+  results/e0/e0_fit_shoes.json），跨域不可混用；
   实验二进一步说明它对语料规模也不敏感，宜视为域级常数。
 

@@ -3,6 +3,12 @@
 ## E0 calibration (camera)
 - rho_hat = 0.3336, R2 = 0.9714, MAE = 0.0317, RMSE = 0.0386 (n=87)
 
+## E0 calibration (ev)
+- rho_hat = 0.9188, R2 = 0.9669, MAE = 0.0223, RMSE = 0.028 (n=87)
+
+## E0 calibration (shoes)
+- rho_hat = 0.8391, R2 = 0.9579, MAE = 0.0231, RMSE = 0.0311 (n=87)
+
 ## E1 filtering response
 - mean |q-meas − model|: fixed=0.0301, adaptive=0.0528
 - strategic offset q_adapt − q_fixed by r: r=0.00:+0.211, r=0.20:+0.233, r=0.40:+0.258, r=0.60:+0.203, r=0.80:+0.041, r=0.95:+0.027

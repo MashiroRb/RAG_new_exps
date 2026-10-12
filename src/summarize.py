@@ -28,6 +28,11 @@ def main():
     e0 = list(csv.DictReader(open(R / "e0" / "e0_fit_camera.json" if False else R / "e0" / "e0_grid_camera.csv")))
     fit = json.load(open(R / "e0" / "e0_fit_camera.json"))
     lines += ["## E0 calibration (camera)", f"- rho_hat = {fit['rho_hat']}, R2 = {fit['r2']}, MAE = {fit['mae']}, RMSE = {fit['rmse']} (n={fit['n_points']})", ""]
+    for dom in ("ev", "shoes"):
+        pth = R / "e0" / f"e0_fit_{dom}.json"
+        if pth.exists():
+            fd = json.load(open(pth))
+            lines += [f"## E0 calibration ({dom})", f"- rho_hat = {fd['rho_hat']}, R2 = {fd['r2']}, MAE = {fd['mae']}, RMSE = {fd['rmse']} (n={fd['n_points']})", ""]
     fig, ax = plt.subplots(figsize=(6.0, 4.0))
     pts = mean_by(e0, ["X"], "exposure")
     xs = sorted(float(k[0]) for k in pts)
