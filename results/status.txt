@@ -1,0 +1,4 @@
+run_all started 2026-10-12 04:28:25
+[2026-10-12 04:28:25] phase r4_anchor START
+[2026-10-12 04:28:28] phase r4_anchor EXIT=0
+[2026-10-12 04:28:28] phase r1_metrics START

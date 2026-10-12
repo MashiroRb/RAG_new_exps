@@ -131,10 +131,16 @@ def chunk_texts(texts, size=512, overlap=64):
     return out
 
 
+_CHUNK_CACHE = {}
+
+
 def nodes_of(recs):
     nodes = []
     for rec in recs:
-        for ch in chunk_texts([format_text(rec)]):
+        key = (rec["_source"], rec["_line"])
+        if key not in _CHUNK_CACHE:
+            _CHUNK_CACHE[key] = chunk_texts([format_text(rec)])
+        for ch in _CHUNK_CACHE[key]:
             nodes.append((rec["_source"], rec["_line"], ch))
     return nodes
 

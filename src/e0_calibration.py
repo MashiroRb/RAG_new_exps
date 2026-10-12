@@ -8,7 +8,7 @@ import numpy as np
 from scipy.optimize import least_squares
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from replay_lib import Embedder, format_text, load_corpus, load_pool
+from replay_lib import Embedder, format_text, load_corpus, load_pool, nodes_of
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTD = ROOT / "RAG_new_exps" / "results" / "e0"
@@ -81,10 +81,7 @@ def main():
         for na, nb in grid:
             selA = [provA[i] for i in sorted(permA[:na])]
             selB = [provB[i] for i in sorted(permB[:nb])]
-            inj_nodes = []
-            for rec in selA + selB:
-                for ch in chunk_texts([format_text(rec)]):
-                    inj_nodes.append((rec["_source"], rec["_line"], ch))
+            inj_nodes = nodes_of(selA + selB)
             inj_ids = list(range(len(corpus_nodes), len(corpus_nodes) + len(inj_nodes)))
             index = build_index(corpus_nodes, inj_nodes, embedder, vec_cache)
             q_mean, counts = exposure_of(index, qvecs, inj_ids, K)

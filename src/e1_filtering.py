@@ -54,7 +54,7 @@ def main():
     qvecs = embedder.encode(queries)
 
     base_nA, base_nB = 40, 40
-    r_grid = [0.0, 0.2, 0.4, 0.6, 0.8]
+    r_grid = [0.0, 0.2, 0.4, 0.6, 0.8, 0.95]
     rstar = r_star(OMEGA, 2, rho, QBAR)
     r_grid_sorted = sorted(set(r_grid + [round(rstar, 3)]))
     print(f"rho={rho} r*={rstar:.4f}")

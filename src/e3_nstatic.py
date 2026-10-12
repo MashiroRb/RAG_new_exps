@@ -122,6 +122,18 @@ def main():
                          "x_star_docs": n_each,
                          "share_max": round(max(shares), 4), "share_min": round(min(shares), 4)})
             print(f"seed {seed} eq N={N}: x*={n_each} q={q_meas:.4f} vs q0={q0:.4f} shares[{max(shares):.2f},{min(shares):.2f}]", flush=True)
+        for om in [0.5, 1.0, 2.0]:
+            q0 = solve_brc_q(1.0, om, 2, rho)
+            x_star = q0 * rho / (2 * (1 - q0)) if q0 > 0 else 0.0
+            n_each = max(1, min(int(round(x_star * scale_doc / 2)), part))
+            sel = [provs[0][i] for i in sorted(perms[0][:n_each])] + [provs[1][i] for i in sorted(perms[1][:n_each])]
+            inj = nodes_of(sel)
+            index, base_n = build_index(corpus_nodes + inj, cache)
+            q_meas, _ = exposure_of(index, base_n, qvecs, K)
+            rows.append({"seed": seed, "arm": f"omega_{om}", "N": 2, "m": n_each,
+                         "X_docs": 2 * n_each, "X": round(2 * n_each / scale_doc, 4),
+                         "q_measured": round(q_meas, 4), "q_pred": round(q0, 4), "x_star_docs": n_each})
+            print(f"seed {seed} omega={om}: x*={n_each} q={q_meas:.4f} vs q0={q0:.4f}", flush=True)
         sol = asymmetric_equilibrium(0.5, 2.0, 1.0, OMEGA, rho)
         if sol is not None:
             n1 = max(1, min(int(round(sol[0] * scale_doc / 2)), part))
