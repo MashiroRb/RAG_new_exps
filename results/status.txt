@@ -26,3 +26,7 @@ run_all restarted 2026-10-12 05:16:46
 [2026-10-12 05:38:24] phase e3_nstatic START
 [2026-10-12 05:40:32] phase e3_nstatic EXIT=0
 [2026-10-12 05:40:32] phase r2_kappa START
+[2026-10-12 05:51:43] phase r2_kappa EXIT=0
+[2026-10-12 05:51:43] phase summarize START
+[2026-10-12 05:51:45] phase summarize EXIT=0
+[2026-10-12 05:51:45] run_all DONE

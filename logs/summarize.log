@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/summarize.py", line 131, in <module>
+    main()
+  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/summarize.py", line 34, in main
+    ax.plot(xs, [pts[x] for x in xs], "o", ms=4, label="measured (3-seed mean)")
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/axes/_axes.py", line 1792, in plot
+    lines = [*self._get_lines(self, *args, data=data, **kwargs)]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/axes/_base.py", line 331, in __call__
+    yield from self._plot_args(
+               ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/axes/_base.py", line 504, in _plot_args
+    axes.xaxis.update_units(x)
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/axis.py", line 1902, in update_units
+    default = self._converter.default_units(data, self)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/category.py", line 106, in default_units
+    axis.set_units(UnitData(data))
+                   ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/category.py", line 182, in __init__
+    self.update(data)
+  File "/usr/local/lib/python3.11/dist-packages/matplotlib/category.py", line 215, in update
+    for val in OrderedDict.fromkeys(data):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'numpy.ndarray'
