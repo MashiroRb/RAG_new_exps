@@ -3,3 +3,9 @@ camera chunked 250 docs
 camera chunked 500 docs
 camera chunked 750 docs
 camera chunked 1000 docs
+camera simple retrievable share: 0.03
+camera cpa retrievable share: 0.739
+ev chunked 250 docs
+ev chunked 500 docs
+ev chunked 750 docs
+ev chunked 1000 docs
