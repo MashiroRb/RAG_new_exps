@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from replay_lib import DATA, Embedder, format_text, load_corpus, load_pool
+from replay_lib import Embedder, format_text, load_corpus, load_pool
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTD = ROOT / "RAG_new_exps" / "results" / "r2"
@@ -21,13 +21,11 @@ def load_queries(domain):
     return re.findall(r'"([^"]+)"', block)
 
 
+from replay_lib import chunk_texts as _chunk_texts
+
+
 def chunk_texts(texts, size=512, overlap=64):
-    from llama_index.core.node_parser import SentenceSplitter
-    sp = SentenceSplitter(chunk_size=size, chunk_overlap=overlap)
-    out = []
-    for t in texts:
-        out.extend(sp.split_text(t))
-    return out
+    return _chunk_texts(texts, size=size, overlap=overlap)
 
 
 def retrievability(domain, corpus_nodes, pool_nodes, queries, embedder):
@@ -88,18 +86,22 @@ def main():
         for rec in corpus:
             for ch in chunker(format_text(rec)):
                 corpus_nodes.append((rec["_source"], rec["_line"], ch))
-        pool_recs = simple + cpa
-        pool_nodes = []
-        for rec in pool_recs:
-            for ch in chunker(format_text(rec)):
-                pool_nodes.append((rec["_source"], rec["_line"], ch))
+        simple_nodes = []
+        for rec in simple:
+            for ch in chunker([format_text(rec)]):
+                simple_nodes.append((rec["_source"], rec["_line"], ch))
+        cpa_nodes = []
+        for rec in cpa:
+            for ch in chunker([format_text(rec)]):
+                cpa_nodes.append((rec["_source"], rec["_line"], ch))
+        pool_nodes = simple_nodes + cpa_nodes
         w, corpus_vecs, pool_vecs = retrievability(domain, corpus_nodes, pool_nodes, queries, embedder)
-        n_s = len(simple)
+        n_s = len(simple_nodes)
         w_simple, w_cpa = w[:n_s], w[n_s:]
         dv_simple = pool_vecs[:n_s]
         dv_cpa = pool_vecs[n_s:]
-        for typ, wv, dv, recs in [("simple", w_simple, dv_simple, simple), ("cpa", w_cpa, dv_cpa, cpa)]:
-            rows = kappa_analysis(dv, corpus_vecs[: len(corpus_nodes)], wv, [0.2, 0.3, 0.5, 0.7, 0.9])
+        for typ, wv, dv in [("simple", w_simple, dv_simple), ("cpa", w_cpa, dv_cpa)]:
+            rows = kappa_analysis(dv, corpus_vecs, wv, [0.2, 0.3, 0.5, 0.7, 0.9])
             for row in rows:
                 row.update({"domain": domain, "doc_type": typ,
                             "retrievability_any": round(float((wv > 0).mean()), 4),
