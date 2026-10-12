@@ -83,9 +83,11 @@ def main():
         queries = load_queries(domain)
         chunker = lambda texts: chunk_texts(texts)
         corpus_nodes = []
-        for rec in corpus:
-            for ch in chunker(format_text(rec)):
+        for i, rec in enumerate(corpus):
+            for ch in chunker([format_text(rec)]):
                 corpus_nodes.append((rec["_source"], rec["_line"], ch))
+            if (i + 1) % 250 == 0:
+                print(domain, "chunked", i + 1, "docs", flush=True)
         simple_nodes = []
         for rec in simple:
             for ch in chunker([format_text(rec)]):
