@@ -80,8 +80,9 @@ def e1_panel(ax, dom, rows):
             fontsize=11, color="dimgray")
     fixed_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "fixed"])
     strat_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "adaptive"])
-    ax.text(0.972, 0.966, f"MAE fixed $= {fixed_err:.3f}$\nMAE strat. $= {strat_err:.3f}$",
-            transform=ax.transAxes, va="top", ha="right", fontsize=9.5, linespacing=1.4,
+    ax.text(0.028, 0.035, f"MAE fixed $= {fixed_err:.3f}$\nMAE strat. $= {strat_err:.3f}$",
+            transform=ax.transAxes, va="bottom", ha="left", fontsize=9.5,
+            linespacing=1.4,
             bbox=dict(boxstyle="round,pad=0.4", facecolor="white", edgecolor="black",
                       lw=0.9))
     ax.set_xlim(-0.02, 1.0)
@@ -89,10 +90,11 @@ def e1_panel(ax, dom, rows):
     ax.set_xticks(np.arange(0, 1.01, 0.2))
     base_axis(ax, "Filter strength $r$", "Exposure $q$" if dom == "camera" else "",
               f"{dom} ($\\hat\\rho={rho:.3f}$)")
-    leg = ax.legend(loc="lower left", frameon=True, framealpha=1.0, fancybox=False,
-                    edgecolor="black", fontsize=7.6, handlelength=1.3,
-                    borderpad=0.32, labelspacing=0.26, ncol=2, columnspacing=0.55,
-                    handletextpad=0.4)
+    leg = ax.legend(loc="upper right", bbox_to_anchor=(0.985, 0.985),
+                    frameon=True, framealpha=1.0, fancybox=False,
+                    edgecolor="black", fontsize=8.2, handlelength=1.5,
+                    borderpad=0.4, labelspacing=0.32, ncol=1,
+                    handletextpad=0.5)
     leg.get_frame().set_linewidth(0.9)
 
 
