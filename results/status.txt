@@ -6,3 +6,9 @@ run_all started 2026-10-12 04:44:22
 [2026-10-12 04:46:02] phase e0_calibration START
 [2026-10-12 04:57:29] phase e0_calibration EXIT=0
 [2026-10-12 04:57:29] phase e1_filtering START
+[2026-10-12 04:59:07] phase e1_filtering EXIT=0
+[2026-10-12 04:59:07] phase e2_rho START
+[2026-10-12 05:00:44] phase e2_rho EXIT=0
+[2026-10-12 05:00:44] phase e3_nstatic START
+[2026-10-12 05:01:20] phase e3_nstatic EXIT=0
+[2026-10-12 05:01:20] phase r2_kappa START

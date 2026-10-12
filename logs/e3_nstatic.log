@@ -1,0 +1,11 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2608.27it/s]
+seed 101 equal N=1 m=5: q=0.0000
+seed 101 equal N=1 m=10: q=0.0000
+seed 101 equal N=1 m=20: q=0.0000
+Traceback (most recent call last):
+  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/e3_nstatic.py", line 164, in <module>
+    main()
+  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/e3_nstatic.py", line 123, in main
+    "share_max": round(max(shares), 4), "share_min": round(min(shares), 4)})
+                       ^^^^^^^^^^^
+ValueError: max() arg is an empty sequence

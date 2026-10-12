@@ -1,0 +1,12 @@
+{
+ "rho_implied_mean": {
+  "0.25": NaN,
+  "0.5": NaN,
+  "1.0": NaN
+ },
+ "ratio_to_full": {
+  "0.25": NaN,
+  "0.5": NaN,
+  "1.0": NaN
+ }
+}
