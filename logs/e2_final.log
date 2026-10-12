@@ -1,1 +1,11 @@
 Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3378.86it/s]
+seed 101 frac=0.25 q=0.7864 X=0.1861 rho_implied=0.0506 rho/f=0.2023
+seed 101 frac=0.5 q=0.7227 X=0.1044 rho_implied=0.0401 rho/f=0.0801
+seed 101 frac=1.0 q=0.6432 X=0.0538 rho_implied=0.0299 rho/f=0.0299
+seed 202 frac=0.25 q=0.7977 X=0.1855 rho_implied=0.0470 rho/f=0.1882
+seed 202 frac=0.5 q=0.7023 X=0.1029 rho_implied=0.0436 rho/f=0.0873
+seed 202 frac=1.0 q=0.5955 X=0.0553 rho_implied=0.0376 rho/f=0.0376
+seed 303 frac=0.25 q=0.7455 X=0.1835 rho_implied=0.0627 rho/f=0.2506
+seed 303 frac=0.5 q=0.6682 X=0.1039 rho_implied=0.0516 rho/f=0.1032
+seed 303 frac=1.0 q=0.5568 X=0.0542 rho_implied=0.0431 rho/f=0.0431
+E2 summary: {'0.25': 0.0534, '0.5': 0.0451, '1.0': 0.0369} ratios: {'0.25': 1.4472, '0.5': 1.2222, '1.0': 1.0} rho/f constancy: {'0.25': 0.2137, '0.5': 0.0902, '1.0': 0.0369}
