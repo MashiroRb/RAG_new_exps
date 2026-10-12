@@ -2,3 +2,10 @@
 seed 101 frac=0.25 q=0.7864 rho_implied=0.1235
 seed 101 frac=0.5 q=0.7227 rho_implied=0.1744
 seed 101 frac=1.0 q=0.6432 rho_implied=0.2522
+seed 202 frac=0.25 q=0.7977 rho_implied=0.1153
+seed 202 frac=0.5 q=0.7023 rho_implied=0.1927
+seed 202 frac=1.0 q=0.5955 rho_implied=0.3088
+seed 303 frac=0.25 q=0.7455 rho_implied=0.1552
+seed 303 frac=0.5 q=0.6682 rho_implied=0.2257
+seed 303 frac=1.0 q=0.5568 rho_implied=0.3618
+E2 summary: {'0.25': 0.1313, '0.5': 0.1976, '1.0': 0.3076} ratios: {'0.25': 0.4269, '0.5': 0.6424, '1.0': 1.0}

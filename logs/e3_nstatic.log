@@ -1,11 +1,69 @@
-Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2608.27it/s]
-seed 101 equal N=1 m=5: q=0.0000
-seed 101 equal N=1 m=10: q=0.0000
-seed 101 equal N=1 m=20: q=0.0000
-Traceback (most recent call last):
-  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/e3_nstatic.py", line 164, in <module>
-    main()
-  File "/tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/src/e3_nstatic.py", line 123, in main
-    "share_max": round(max(shares), 4), "share_min": round(min(shares), 4)})
-                       ^^^^^^^^^^^
-ValueError: max() arg is an empty sequence
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3447.20it/s]
+rho=0.3336 omega_star=0.1484
+seed 101 equal N=1 m=5: q=0.0841 pred=0.0785
+seed 101 equal N=1 m=10: q=0.1295 pred=0.1455
+seed 101 equal N=1 m=20: q=0.2432 pred=0.2541
+seed 101 equilibrium_w* N=1: x*=32 used=32 capped=False q=0.3750 vs q0=0.3560
+seed 101 equilibrium_w1 N=1: x*=86 used=86 capped=False q=0.6227 vs q0=0.5954
+seed 101 equal N=2 m=5: q=0.1523 pred=0.1455
+seed 101 equal N=2 m=10: q=0.2909 pred=0.2541
+seed 101 equal N=2 m=20: q=0.4818 pred=0.4052
+seed 101 equilibrium_w* N=2: x*=29 used=29 capped=False q=0.5795 vs q0=0.5000
+seed 101 equilibrium_w1 N=2: x*=85 used=85 capped=False q=0.8159 vs q0=0.7434
+seed 101 equal N=4 m=5: q=0.2114 pred=0.2541
+seed 101 equal N=4 m=10: q=0.4409 pred=0.4052
+seed 101 equal N=4 m=20: q=0.5932 pred=0.5767
+seed 101 equilibrium_w* N=4: x*=25 used=25 capped=False q=0.6432 vs q0=0.6267
+seed 101 equal N=8 m=5: q=0.3295 pred=0.4052
+seed 101 equal N=8 m=10: q=0.6295 pred=0.5767
+seed 101 equal N=8 m=20: q=0.8068 pred=0.7316
+seed 101 equilibrium_w* N=8: x*=19 used=19 capped=False q=0.7932 vs q0=0.7263
+seed 101 omega=0.5: x*=59 used=59 capped=False q=0.7386 vs q0=0.6665
+seed 101 omega=1.0: x*=85 used=85 capped=False q=0.8159 vs q0=0.7434
+seed 101 omega=2.0: x*=122 used=88 capped=True q=0.8205 vs q0=0.8062
+seed 101 asym: n=(47,16) q=0.5864 shares=(0.71,0.29)
+seed 202 equal N=1 m=5: q=0.0341 pred=0.0785
+seed 202 equal N=1 m=10: q=0.0818 pred=0.1455
+seed 202 equal N=1 m=20: q=0.2023 pred=0.2541
+seed 202 equilibrium_w* N=1: x*=32 used=32 capped=False q=0.3205 vs q0=0.3560
+seed 202 equilibrium_w1 N=1: x*=86 used=86 capped=False q=0.6455 vs q0=0.5954
+seed 202 equal N=2 m=5: q=0.1000 pred=0.1455
+seed 202 equal N=2 m=10: q=0.2364 pred=0.2541
+seed 202 equal N=2 m=20: q=0.4295 pred=0.4052
+seed 202 equilibrium_w* N=2: x*=29 used=29 capped=False q=0.5182 vs q0=0.5000
+seed 202 equilibrium_w1 N=2: x*=85 used=85 capped=False q=0.8114 vs q0=0.7434
+seed 202 equal N=4 m=5: q=0.2727 pred=0.2541
+seed 202 equal N=4 m=10: q=0.4386 pred=0.4052
+seed 202 equal N=4 m=20: q=0.6205 pred=0.5767
+seed 202 equilibrium_w* N=4: x*=25 used=25 capped=False q=0.6614 vs q0=0.6267
+seed 202 equal N=8 m=5: q=0.3909 pred=0.4052
+seed 202 equal N=8 m=10: q=0.5659 pred=0.5767
+seed 202 equal N=8 m=20: q=0.7955 pred=0.7316
+seed 202 equilibrium_w* N=8: x*=19 used=19 capped=False q=0.7841 vs q0=0.7263
+seed 202 omega=0.5: x*=59 used=59 capped=False q=0.7227 vs q0=0.6665
+seed 202 omega=1.0: x*=85 used=85 capped=False q=0.8114 vs q0=0.7434
+seed 202 omega=2.0: x*=122 used=88 capped=True q=0.8205 vs q0=0.8062
+seed 202 asym: n=(47,16) q=0.5409 shares=(0.76,0.24)
+seed 303 equal N=1 m=5: q=0.1227 pred=0.0785
+seed 303 equal N=1 m=10: q=0.2409 pred=0.1455
+seed 303 equal N=1 m=20: q=0.3205 pred=0.2541
+seed 303 equilibrium_w* N=1: x*=32 used=32 capped=False q=0.4432 vs q0=0.3560
+seed 303 equilibrium_w1 N=1: x*=86 used=86 capped=False q=0.6409 vs q0=0.5954
+seed 303 equal N=2 m=5: q=0.1273 pred=0.1455
+seed 303 equal N=2 m=10: q=0.2386 pred=0.2541
+seed 303 equal N=2 m=20: q=0.3932 pred=0.4052
+seed 303 equilibrium_w* N=2: x*=29 used=29 capped=False q=0.4977 vs q0=0.5000
+seed 303 equilibrium_w1 N=2: x*=85 used=85 capped=False q=0.8136 vs q0=0.7434
+seed 303 equal N=4 m=5: q=0.2341 pred=0.2541
+seed 303 equal N=4 m=10: q=0.3636 pred=0.4052
+seed 303 equal N=4 m=20: q=0.5955 pred=0.5767
+seed 303 equilibrium_w* N=4: x*=25 used=25 capped=False q=0.6659 vs q0=0.6267
+seed 303 equal N=8 m=5: q=0.4000 pred=0.4052
+seed 303 equal N=8 m=10: q=0.6091 pred=0.5767
+seed 303 equal N=8 m=20: q=0.8000 pred=0.7316
+seed 303 equilibrium_w* N=8: x*=19 used=19 capped=False q=0.7818 vs q0=0.7263
+seed 303 omega=0.5: x*=59 used=59 capped=False q=0.7227 vs q0=0.6665
+seed 303 omega=1.0: x*=85 used=85 capped=False q=0.8136 vs q0=0.7434
+seed 303 omega=2.0: x*=122 used=88 capped=True q=0.8205 vs q0=0.8062
+seed 303 asym: n=(47,16) q=0.5341 shares=(0.77,0.23)
+E3 done -> /tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/results/e3
