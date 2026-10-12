@@ -84,7 +84,7 @@ def main():
                 pq_rows.append({"seed": seed, "arm": "fixed", "r": r, **m})
             q_star = solve_brc_q(eta, OMEGA, 2, rho)
             x_star = q_star * rho / (eta * 2 * (1 - q_star)) if q_star > 0 else 0.0
-            n_star = int(round(x_star * 2 * half_docs / 2))
+            n_star = int(round(x_star * 2 * half_docs))
             n_star = min(n_star, half)
             selA = [provA[i] for i in sorted(permA[:n_star])]
             selB = [provB[i] for i in sorted(permB[:n_star])]

@@ -49,8 +49,8 @@ def main():
             n_keep = int(round(f * len(corpus)))
             sub = [corpus[i] for i in sorted(perm_corpus[:n_keep])]
             corpus_nodes = nodes_of(sub)
-            index, base_n = build_index(corpus_nodes + inj, cache)
-            q_meas, _ = exposure_of(index, base_n, qvecs, K)
+            index, _ = build_index(corpus_nodes + inj, cache)
+            q_meas, _ = exposure_of(index, len(corpus_nodes), qvecs, K)
             X = (nA + nB) / (2 * HALF_DOCS[domain])
             rho_imp = X * (1 - q_meas) / q_meas if q_meas > 0 else float("nan")
             rows.append({"seed": seed, "frac": f, "n_corpus_docs": n_keep,

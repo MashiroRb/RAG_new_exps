@@ -76,21 +76,27 @@ def main():
 
     try:
         e3 = list(csv.DictReader(open(R / "e3" / "e3_camera.csv")))
-        eq = [r for r in e3 if r["arm"] == "equilibrium_r0"]
+        eqs = [r for r in e3 if r["arm"].startswith("equilibrium")]
         om = [r for r in e3 if r["arm"].startswith("omega_")]
         asym = [r for r in e3 if r["arm"].startswith("asymmetric")]
-        if eq:
-            byN = {}
-            for r in eq:
-                byN.setdefault(int(r["N"]), []).append((float(r["x_star_docs"]), float(r["X_docs"]), float(r["q_measured"]), float(r["q_pred"])))
-            lines += ["## E3 N-comparative statics (equilibrium arm, r=0)"]
-            for N in sorted(byN):
-                v = np.mean(byN[N], axis=0)
-                lines.append(f"- N={N}: x*/provider={v[0]:.1f} docs, total={v[1]:.1f} docs, q_meas={v[2]:.3f} vs q0={v[3]:.3f}")
+        if eqs:
+            lines += ["## E3 N-comparative statics (equilibrium arms, r=0)"]
+            for tag in sorted(set(r["arm"] for r in eqs)):
+                byN = {}
+                for r in (x for x in eqs if x["arm"] == tag):
+                    byN.setdefault(int(r["N"]), []).append((float(r["x_star_docs"]), float(r["X_docs"]),
+                                                            float(r["q_measured"]), float(r["q_pred"]),
+                                                            int(r.get("capped", 0) or 0)))
+                for N in sorted(byN):
+                    v = np.mean(byN[N], axis=0)
+                    cap = " (cap-binding)" if v[4] > 0.5 else ""
+                    lines.append(f"- {tag} N={N}: x*/provider={v[0]:.1f} docs, total={v[1]:.1f} docs, "
+                                 f"q_meas={v[2]:.3f} vs q0={v[3]:.3f}{cap}")
         if om:
-            lines += ["- omega arm (N=2):"]
+            lines += ["- omega sweep (N=2, cap-clamped where x* exceeds pool):"]
             for r in om:
-                lines.append(f"  - omega={r['arm'].split('_')[1]}: x*/prov={r['x_star_docs']} q_meas={r['q_measured']} vs q0={r['q_pred']}")
+                cap = " (cap-binding)" if r.get("capped") == "1" else ""
+                lines.append(f"  - omega={r['arm'].split('_')[1]}: x*={r['x_star_docs']} q_meas={r['q_measured']} vs q0={r['q_pred']}{cap}")
         if asym:
             sh = np.mean([[float(r["share_lowcost"]), float(r["share_highcost"])] for r in asym], axis=0)
             lines += [f"- asymmetric (cost 0.5 vs 2.0): measured exposure shares = {sh[0]:.2f} vs {sh[1]:.2f} (low-cost provider takes the larger share)", ""]
