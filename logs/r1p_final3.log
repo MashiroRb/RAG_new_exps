@@ -1,0 +1,3 @@
+{'metric': 'q_run', 'icc_condition': np.float64(0.6134), 'icc_seed': np.float64(0.0), 'mean': 0.4317, 'std': 0.3168}
+{'metric': 'hit', 'icc_condition': np.float64(0.4581), 'icc_seed': np.float64(0.0001), 'mean': 0.8592, 'std': 0.3478}
+{'metric': 'rr_weighted', 'icc_condition': np.float64(0.6099), 'icc_seed': np.float64(0.0001), 'mean': 0.1499, 'std': 0.1002}

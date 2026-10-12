@@ -14,3 +14,6 @@ ev cpa retrievable share: 0.729
 shoes chunked 250 docs
 shoes chunked 500 docs
 shoes chunked 750 docs
+shoes simple retrievable share: 0.039
+shoes cpa retrievable share: 0.709
+r2 done -> /tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/results/r2/kappa_table.csv
