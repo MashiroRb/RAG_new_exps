@@ -14,3 +14,5 @@ run_all started 2026-10-12 04:44:22
 [2026-10-12 05:01:20] phase r2_kappa START
 [2026-10-12 05:05:55] phase r2_kappa EXIT=0
 [2026-10-12 05:05:55] phase e0_ev START
+run_all restarted 2026-10-12 05:16:46
+[2026-10-12 05:16:46] phase e0_ev START
