@@ -1,0 +1,24 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2695.12it/s]
+rho=0.9188 r*=0.4486
+seed 101 r=0.000 fixed q=0.3523 (mech 0.3310) | adaptive planned=150 kept=150 q=0.5455 (BRC 0.4822)
+seed 101 r=0.200 fixed q=0.2432 (mech 0.2836) | adaptive planned=142 kept=110 q=0.4455 (BRC 0.4136)
+seed 101 r=0.400 fixed q=0.2386 (mech 0.2289) | adaptive planned=130 kept=82 q=0.3568 (BRC 0.3252)
+seed 101 r=0.449 fixed q=0.2159 (mech 0.2142) | adaptive planned=126 kept=63 q=0.2773 (BRC 0.2998)
+seed 101 r=0.600 fixed q=0.1568 (mech 0.1652) | adaptive planned=108 kept=45 q=0.2045 (BRC 0.2110)
+seed 101 r=0.800 fixed q=0.0750 (mech 0.0900) | adaptive planned=68 kept=7 q=0.0409 (BRC 0.0775)
+seed 101 r=0.950 fixed q=0.0591 (mech 0.0241) | adaptive planned=18 kept=1 q=0.0023 (BRC 0.0058)
+seed 202 r=0.000 fixed q=0.3227 (mech 0.3310) | adaptive planned=150 kept=150 q=0.5386 (BRC 0.4822)
+seed 202 r=0.200 fixed q=0.2932 (mech 0.2836) | adaptive planned=142 kept=113 q=0.4205 (BRC 0.4136)
+seed 202 r=0.400 fixed q=0.1682 (mech 0.2289) | adaptive planned=130 kept=84 q=0.3455 (BRC 0.3252)
+seed 202 r=0.449 fixed q=0.1523 (mech 0.2142) | adaptive planned=126 kept=64 q=0.2545 (BRC 0.2998)
+seed 202 r=0.600 fixed q=0.1409 (mech 0.1652) | adaptive planned=108 kept=47 q=0.2091 (BRC 0.2110)
+seed 202 r=0.800 fixed q=0.0614 (mech 0.0900) | adaptive planned=68 kept=9 q=0.0545 (BRC 0.0775)
+seed 202 r=0.950 fixed q=0.0182 (mech 0.0241) | adaptive planned=18 kept=2 q=0.0068 (BRC 0.0058)
+seed 303 r=0.000 fixed q=0.3341 (mech 0.3310) | adaptive planned=150 kept=150 q=0.5568 (BRC 0.4822)
+seed 303 r=0.200 fixed q=0.2864 (mech 0.2836) | adaptive planned=142 kept=113 q=0.4386 (BRC 0.4136)
+seed 303 r=0.400 fixed q=0.1955 (mech 0.2289) | adaptive planned=130 kept=82 q=0.3273 (BRC 0.3252)
+seed 303 r=0.449 fixed q=0.2091 (mech 0.2142) | adaptive planned=126 kept=73 q=0.2886 (BRC 0.2998)
+seed 303 r=0.600 fixed q=0.1227 (mech 0.1652) | adaptive planned=108 kept=47 q=0.1932 (BRC 0.2110)
+seed 303 r=0.800 fixed q=0.0614 (mech 0.0900) | adaptive planned=68 kept=15 q=0.0773 (BRC 0.0775)
+seed 303 r=0.950 fixed q=0.0182 (mech 0.0241) | adaptive planned=18 kept=3 q=0.0114 (BRC 0.0058)
+E1 done -> /tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/results/e1

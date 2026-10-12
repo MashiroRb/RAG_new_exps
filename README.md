@@ -168,6 +168,10 @@ bash scripts/sync_loop.sh 180
    删掉 r 比例，用剩余部分重建索引，44 条查询重新检索并计数曝光。
    理论预言列直接代入公式 曝光 = (1 减 r) 乘 X 除以（(1 减 r) 乘 X 加 0.334），
    其中 X 是固定的 0.455（80 除以 176）。
+   运行方式：python3 src/e1_filtering.py（相机域）、
+   python3 src/e1_filtering.py ev、python3 src/e1_filtering.py shoes。
+   各域的检索阻力与闭锁点不同：相机域阻力 0.334、闭锁点约 0.80；
+   电动车域阻力 0.919、闭锁点约 0.45；球鞋域阻力 0.839、闭锁点约 0.50。
 3. 策略注入臂（聪明办法）：先解博弈方程，得到在当前过滤强度下注入方的
    均衡曝光 q*(η) 与每家应注入的条数 x*；两家各按 x* 注入，然后同样随机
    删掉 r 比例（模拟平台过滤照常执行），用剩余部分重建索引、重新计数。
@@ -180,7 +184,9 @@ bash scripts/sync_loop.sh 180
 
 ### 输出文件与字段
 
-- results/e1/e1_camera.csv：逐配置结果，一行是一个种子、一个臂、一个过滤档位
+结果文件按域各一份：e1_camera.csv、e1_ev.csv、e1_shoes.csv（图分别为
+e1_camera.png、e1_ev.png、e1_shoes.png，逐查询账 e1_{域}_perquery.csv）。
+以 e1_camera.csv 为例，逐配置结果，一行是一个种子、一个臂、一个过滤档位
   - seed：随机种子
   - arm：fixed（固定注入臂）或 adaptive（策略注入臂）
   - r：过滤强度，即随机删除注入文档的比例
@@ -190,6 +196,7 @@ bash scripts/sync_loop.sh 180
   - q_pred：理论预言的曝光（固定臂代入打折公式；策略臂取均衡曝光）
   - abs_err：实测与预言的偏差绝对值
 - results/e1/e1_camera_perquery.csv：逐查询细账，供稳定性检验复用
+  （电动车域与球鞋域的同名文件结构相同）
   - q_idx：第几个查询；n_inj：该查询前 10 条里注入文档的条数
   - q_run：该查询的注入占比；hit：是否至少混入 1 条（0 或 1）
   - rr_weighted：按排名加权的污染得分（排位越靠前权重越高）
@@ -291,7 +298,9 @@ bash scripts/sync_loop.sh 180
 
 ### 输出文件与字段
 
-- results/e3/e3_camera.csv：逐配置结果
+- results/e3/e3_camera.csv、results/e3/e3_ev.csv、results/e3/e3_shoes.csv：
+  逐配置结果（运行方式 python3 src/e3_nstatic.py ev、
+  python3 src/e3_nstatic.py shoes）
   - seed：随机种子
   - arm：配置类型，取值 equal_m（笨商家固定剂量）、
     equilibrium_w*（聪明商家，校准收益比）、equilibrium_w1（收益比 1）、
@@ -381,7 +390,8 @@ bash scripts/sync_loop.sh 180
 
 ### 输出文件与字段
 
-- results/r1p/metric_stability_camera.csv
+- results/r1p/metric_stability_camera.csv（另有 metric_stability_ev.csv、
+  metric_stability_shoes.csv，结构相同）
   - metric：指标名（q_run 注入占比、hit 是否命中、rr_weighted 排名加权得分）
   - icc_condition：条件之间的一致度（越高说明不同过滤档位确实产生
     系统性差异）

@@ -1,0 +1,69 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3004.19it/s]
+rho=0.9188 omega_star=1.1256
+seed 101 equal N=1 m=5: q=0.0136 pred=0.0300
+seed 101 equal N=1 m=10: q=0.0318 pred=0.0582
+seed 101 equal N=1 m=20: q=0.0909 pred=0.1101
+seed 101 equilibrium_w* N=1: x*=89 used=89 capped=False q=0.3364 vs q0=0.3560
+seed 101 equilibrium_w1 N=1: x*=83 used=83 capped=False q=0.3159 vs q0=0.3402
+seed 101 equal N=2 m=5: q=0.0477 pred=0.0582
+seed 101 equal N=2 m=10: q=0.0977 pred=0.1101
+seed 101 equal N=2 m=20: q=0.1886 pred=0.1983
+seed 101 equilibrium_w* N=2: x*=81 used=81 capped=False q=0.5864 vs q0=0.5000
+seed 101 equilibrium_w1 N=2: x*=75 used=75 capped=False q=0.5500 vs q0=0.4822
+seed 101 equal N=4 m=5: q=0.1227 pred=0.1101
+seed 101 equal N=4 m=10: q=0.1955 pred=0.1983
+seed 101 equal N=4 m=20: q=0.3477 pred=0.3310
+seed 101 equilibrium_w* N=4: x*=68 used=44 capped=True q=0.6068 vs q0=0.6267
+seed 101 equal N=8 m=5: q=0.1591 pred=0.1983
+seed 101 equal N=8 m=10: q=0.3000 pred=0.3310
+seed 101 equal N=8 m=20: q=0.5750 pred=0.4973
+seed 101 equilibrium_w* N=8: x*=54 used=22 capped=True q=0.6068 vs q0=0.7263
+seed 101 omega=0.5: x*=49 used=49 capped=False q=0.3909 vs q0=0.3754
+seed 101 omega=1.0: x*=75 used=75 capped=False q=0.5500 vs q0=0.4822
+seed 101 omega=2.0: x*=113 used=88 capped=True q=0.6068 vs q0=0.5832
+seed 101 asym: n=(88,45) q=0.4932 shares=(0.68,0.32)
+seed 202 equal N=1 m=5: q=0.0205 pred=0.0300
+seed 202 equal N=1 m=10: q=0.0432 pred=0.0582
+seed 202 equal N=1 m=20: q=0.0886 pred=0.1101
+seed 202 equilibrium_w* N=1: x*=89 used=89 capped=False q=0.3205 vs q0=0.3560
+seed 202 equilibrium_w1 N=1: x*=83 used=83 capped=False q=0.2977 vs q0=0.3402
+seed 202 equal N=2 m=5: q=0.0386 pred=0.0582
+seed 202 equal N=2 m=10: q=0.0795 pred=0.1101
+seed 202 equal N=2 m=20: q=0.1432 pred=0.1983
+seed 202 equilibrium_w* N=2: x*=81 used=81 capped=False q=0.5614 vs q0=0.5000
+seed 202 equilibrium_w1 N=2: x*=75 used=75 capped=False q=0.5386 vs q0=0.4822
+seed 202 equal N=4 m=5: q=0.0932 pred=0.1101
+seed 202 equal N=4 m=10: q=0.1932 pred=0.1983
+seed 202 equal N=4 m=20: q=0.3205 pred=0.3310
+seed 202 equilibrium_w* N=4: x*=68 used=44 capped=True q=0.6068 vs q0=0.6267
+seed 202 equal N=8 m=5: q=0.1909 pred=0.1983
+seed 202 equal N=8 m=10: q=0.3318 pred=0.3310
+seed 202 equal N=8 m=20: q=0.5750 pred=0.4973
+seed 202 equilibrium_w* N=8: x*=54 used=22 capped=True q=0.6068 vs q0=0.7263
+seed 202 omega=0.5: x*=49 used=49 capped=False q=0.3773 vs q0=0.3754
+seed 202 omega=1.0: x*=75 used=75 capped=False q=0.5386 vs q0=0.4822
+seed 202 omega=2.0: x*=113 used=88 capped=True q=0.6068 vs q0=0.5832
+seed 202 asym: n=(88,45) q=0.4818 shares=(0.70,0.30)
+seed 303 equal N=1 m=5: q=0.0250 pred=0.0300
+seed 303 equal N=1 m=10: q=0.0409 pred=0.0582
+seed 303 equal N=1 m=20: q=0.0795 pred=0.1101
+seed 303 equilibrium_w* N=1: x*=89 used=89 capped=False q=0.3659 vs q0=0.3560
+seed 303 equilibrium_w1 N=1: x*=83 used=83 capped=False q=0.3500 vs q0=0.3402
+seed 303 equal N=2 m=5: q=0.0568 pred=0.0582
+seed 303 equal N=2 m=10: q=0.1136 pred=0.1101
+seed 303 equal N=2 m=20: q=0.1727 pred=0.1983
+seed 303 equilibrium_w* N=2: x*=81 used=81 capped=False q=0.5795 vs q0=0.5000
+seed 303 equilibrium_w1 N=2: x*=75 used=75 capped=False q=0.5318 vs q0=0.4822
+seed 303 equal N=4 m=5: q=0.1023 pred=0.1101
+seed 303 equal N=4 m=10: q=0.1795 pred=0.1983
+seed 303 equal N=4 m=20: q=0.3318 pred=0.3310
+seed 303 equilibrium_w* N=4: x*=68 used=44 capped=True q=0.6068 vs q0=0.6267
+seed 303 equal N=8 m=5: q=0.1795 pred=0.1983
+seed 303 equal N=8 m=10: q=0.3591 pred=0.3310
+seed 303 equal N=8 m=20: q=0.5750 pred=0.4973
+seed 303 equilibrium_w* N=8: x*=54 used=22 capped=True q=0.6068 vs q0=0.7263
+seed 303 omega=0.5: x*=49 used=49 capped=False q=0.3614 vs q0=0.3754
+seed 303 omega=1.0: x*=75 used=75 capped=False q=0.5318 vs q0=0.4822
+seed 303 omega=2.0: x*=113 used=88 capped=True q=0.6068 vs q0=0.5832
+seed 303 asym: n=(88,45) q=0.4795 shares=(0.71,0.29)
+E3 done -> /tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/results/e3

@@ -1,0 +1,4 @@
+metric,icc_condition,icc_seed,mean,std
+q_run,0.4999,0.001,0.2219,0.2159
+hit,0.4322,0.0008,0.7148,0.4515
+rr_weighted,0.4938,0.0006,0.1016,0.0875
