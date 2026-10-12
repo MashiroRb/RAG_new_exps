@@ -9,3 +9,8 @@ ev chunked 250 docs
 ev chunked 500 docs
 ev chunked 750 docs
 ev chunked 1000 docs
+ev simple retrievable share: 0.0
+ev cpa retrievable share: 0.729
+shoes chunked 250 docs
+shoes chunked 500 docs
+shoes chunked 750 docs
