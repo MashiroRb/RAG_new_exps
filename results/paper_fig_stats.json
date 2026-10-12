@@ -1,0 +1,113 @@
+{
+ "e1_camera": {
+  "arm_err": {
+   "fixed": 0.03014444444444445,
+   "adaptive": 0.052777777777777785
+  },
+  "rstar": 0.8
+ },
+ "e1_ev": {
+  "arm_err": {
+   "fixed": 0.021547619047619045,
+   "adaptive": 0.023214285714285715
+  },
+  "rstar": 0.45
+ },
+ "e1_shoes": {
+  "arm_err": {
+   "fixed": 0.025766666666666663,
+   "adaptive": 0.03473333333333334
+  },
+  "rstar": 0.5
+ },
+ "e3_camera": {
+  "err_eq_uncapped": 0.04269166666666668,
+  "err_om_uncapped": 0.0658666666666667
+ },
+ "e3_ev": {
+  "err_eq_uncapped": 0.04871666666666668,
+  "err_om_uncapped": 0.03420000000000001
+ },
+ "e3_shoes": {
+  "err_eq_uncapped": 0.043799999999999985,
+  "err_om_uncapped": 0.049533333333333325
+ },
+ "e3_nsweep_camera": {
+  "1": {
+   "x_star": 32.0,
+   "q_meas": 0.37956666666666666,
+   "q_pred": 0.35600000000000004,
+   "capped": false
+  },
+  "2": {
+   "x_star": 29.0,
+   "q_meas": 0.5318,
+   "q_pred": 0.5,
+   "capped": false
+  },
+  "4": {
+   "x_star": 25.0,
+   "q_meas": 0.6568333333333333,
+   "q_pred": 0.6267,
+   "capped": false
+  },
+  "8": {
+   "x_star": 19.0,
+   "q_meas": 0.7863666666666668,
+   "q_pred": 0.7262999999999998,
+   "capped": false
+  }
+ },
+ "e3_nsweep_ev": {
+  "1": {
+   "x_star": 89.0,
+   "q_meas": 0.34093333333333337,
+   "q_pred": 0.35600000000000004,
+   "capped": false
+  },
+  "2": {
+   "x_star": 81.0,
+   "q_meas": 0.5757666666666666,
+   "q_pred": 0.5,
+   "capped": false
+  },
+  "4": {
+   "x_star": 68.0,
+   "q_meas": 0.6068,
+   "q_pred": 0.6267,
+   "capped": true
+  },
+  "8": {
+   "x_star": 54.0,
+   "q_meas": 0.6068,
+   "q_pred": 0.7262999999999998,
+   "capped": true
+  }
+ },
+ "e3_nsweep_shoes": {
+  "1": {
+   "x_star": 85.0,
+   "q_meas": 0.3393333333333333,
+   "q_pred": 0.35600000000000004,
+   "capped": false
+  },
+  "2": {
+   "x_star": 77.0,
+   "q_meas": 0.5709333333333334,
+   "q_pred": 0.5,
+   "capped": false
+  },
+  "4": {
+   "x_star": 65.0,
+   "q_meas": 0.641,
+   "q_pred": 0.6267,
+   "capped": true
+  },
+  "8": {
+   "x_star": 51.0,
+   "q_meas": 0.641,
+   "q_pred": 0.7262999999999998,
+   "capped": true
+  }
+ }
+}
