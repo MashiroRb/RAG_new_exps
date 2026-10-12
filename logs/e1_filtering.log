@@ -1,0 +1,8 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2627.35it/s]
+rho=0.3336 r*=0.7998
+seed 101 r=0.000 fixed q=0.6045 (mech 0.5767) | adaptive n=86 q=0.6318 (BRC 0.7434)
+seed 101 r=0.200 fixed q=0.4773 (mech 0.5215) | adaptive n=84 q=0.6205 (BRC 0.6955)
+seed 101 r=0.400 fixed q=0.4295 (mech 0.4498) | adaptive n=82 q=0.6091 (BRC 0.6251)
+seed 101 r=0.600 fixed q=0.2591 (mech 0.3528) | adaptive n=76 q=0.6023 (BRC 0.5113)
+seed 101 r=0.800 fixed q=0.2795 (mech 0.2142) | adaptive n=62 q=0.5386 (BRC 0.2997)
+seed 101 r=0.950 fixed q=0.0545 (mech 0.0638) | adaptive n=24 q=0.2932 (BRC 0.0405)

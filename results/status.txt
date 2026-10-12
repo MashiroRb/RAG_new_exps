@@ -4,3 +4,5 @@ run_all started 2026-10-12 04:44:22
 [2026-10-12 04:44:24] phase r1_metrics START
 [2026-10-12 04:46:02] phase r1_metrics EXIT=0
 [2026-10-12 04:46:02] phase e0_calibration START
+[2026-10-12 04:57:29] phase e0_calibration EXIT=0
+[2026-10-12 04:57:29] phase e1_filtering START
