@@ -1,21 +1,21 @@
-Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2627.35it/s]
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5710.87it/s]
 rho=0.3336 r*=0.7998
-seed 101 r=0.000 fixed q=0.6045 (mech 0.5767) | adaptive n=86 q=0.6318 (BRC 0.7434)
-seed 101 r=0.200 fixed q=0.4773 (mech 0.5215) | adaptive n=84 q=0.6205 (BRC 0.6955)
-seed 101 r=0.400 fixed q=0.4295 (mech 0.4498) | adaptive n=82 q=0.6091 (BRC 0.6251)
-seed 101 r=0.600 fixed q=0.2591 (mech 0.3528) | adaptive n=76 q=0.6023 (BRC 0.5113)
-seed 101 r=0.800 fixed q=0.2795 (mech 0.2142) | adaptive n=62 q=0.5386 (BRC 0.2997)
-seed 101 r=0.950 fixed q=0.0545 (mech 0.0638) | adaptive n=24 q=0.2932 (BRC 0.0405)
-seed 202 r=0.000 fixed q=0.5932 (mech 0.5767) | adaptive n=86 q=0.6091 (BRC 0.7434)
-seed 202 r=0.200 fixed q=0.5273 (mech 0.5215) | adaptive n=84 q=0.6000 (BRC 0.6955)
-seed 202 r=0.400 fixed q=0.4523 (mech 0.4498) | adaptive n=82 q=0.5955 (BRC 0.6251)
-seed 202 r=0.600 fixed q=0.3295 (mech 0.3528) | adaptive n=76 q=0.5795 (BRC 0.5113)
-seed 202 r=0.800 fixed q=0.2182 (mech 0.2142) | adaptive n=62 q=0.5386 (BRC 0.2997)
-seed 202 r=0.950 fixed q=0.0159 (mech 0.0638) | adaptive n=24 q=0.2205 (BRC 0.0405)
-seed 303 r=0.000 fixed q=0.6000 (mech 0.5767) | adaptive n=86 q=0.6114 (BRC 0.7434)
-seed 303 r=0.200 fixed q=0.4864 (mech 0.5215) | adaptive n=84 q=0.6091 (BRC 0.6955)
-seed 303 r=0.400 fixed q=0.4909 (mech 0.4498) | adaptive n=82 q=0.6045 (BRC 0.6251)
-seed 303 r=0.600 fixed q=0.2795 (mech 0.3528) | adaptive n=76 q=0.5932 (BRC 0.5113)
-seed 303 r=0.800 fixed q=0.2000 (mech 0.2142) | adaptive n=62 q=0.5182 (BRC 0.2997)
-seed 303 r=0.950 fixed q=0.0477 (mech 0.0638) | adaptive n=24 q=0.2727 (BRC 0.0405)
+seed 101 r=0.000 fixed q=0.6045 (mech 0.5767) | adaptive n=170 q=0.8068 (BRC 0.7434)
+seed 101 r=0.200 fixed q=0.4773 (mech 0.5215) | adaptive n=168 q=0.8000 (BRC 0.6955)
+seed 101 r=0.400 fixed q=0.4295 (mech 0.4498) | adaptive n=164 q=0.7977 (BRC 0.6251)
+seed 101 r=0.600 fixed q=0.2591 (mech 0.3528) | adaptive n=154 q=0.7614 (BRC 0.5113)
+seed 101 r=0.800 fixed q=0.2795 (mech 0.2142) | adaptive n=126 q=0.7205 (BRC 0.2997)
+seed 101 r=0.950 fixed q=0.0545 (mech 0.0638) | adaptive n=50 q=0.4568 (BRC 0.0405)
+seed 202 r=0.000 fixed q=0.5932 (mech 0.5767) | adaptive n=170 q=0.8114 (BRC 0.7434)
+seed 202 r=0.200 fixed q=0.5273 (mech 0.5215) | adaptive n=168 q=0.8045 (BRC 0.6955)
+seed 202 r=0.400 fixed q=0.4523 (mech 0.4498) | adaptive n=164 q=0.7977 (BRC 0.6251)
+seed 202 r=0.600 fixed q=0.3295 (mech 0.3528) | adaptive n=154 q=0.7909 (BRC 0.5113)
+seed 202 r=0.800 fixed q=0.2182 (mech 0.2142) | adaptive n=126 q=0.7432 (BRC 0.2997)
+seed 202 r=0.950 fixed q=0.0159 (mech 0.0638) | adaptive n=50 q=0.4250 (BRC 0.0405)
+seed 303 r=0.000 fixed q=0.6000 (mech 0.5767) | adaptive n=170 q=0.8114 (BRC 0.7434)
+seed 303 r=0.200 fixed q=0.4864 (mech 0.5215) | adaptive n=168 q=0.8023 (BRC 0.6955)
+seed 303 r=0.400 fixed q=0.4909 (mech 0.4498) | adaptive n=164 q=0.8023 (BRC 0.6251)
+seed 303 r=0.600 fixed q=0.2795 (mech 0.3528) | adaptive n=154 q=0.7886 (BRC 0.5113)
+seed 303 r=0.800 fixed q=0.2000 (mech 0.2142) | adaptive n=126 q=0.7182 (BRC 0.2997)
+seed 303 r=0.950 fixed q=0.0477 (mech 0.0638) | adaptive n=50 q=0.4727 (BRC 0.0405)
 E1 done -> /tmp/work/prj_01M4GEG0RYB2H41SBQGZ0EMN5V/RAG_new_exps/results/e1

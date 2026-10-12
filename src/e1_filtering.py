@@ -88,17 +88,21 @@ def main():
             n_star = min(n_star, half)
             selA = [provA[i] for i in sorted(permA[:n_star])]
             selB = [provB[i] for i in sorted(permB[:n_star])]
-            inj2 = nodes_of(selA + selB)
+            keep2 = rng.random(2 * n_star) >= r
+            keptA2 = [rec for rec, kp in zip(selA, keep2[:n_star]) if kp]
+            keptB2 = [rec for rec, kp in zip(selB, keep2[n_star:]) if kp]
+            inj2 = nodes_of(keptA2 + keptB2)
             index2, _ = build_index(corpus_nodes + inj2, cache)
             q_adapt, inj_rows2 = exposure_of(index2, len(corpus_nodes), qvecs, K)
-            rows.append({"seed": seed, "arm": "adaptive", "r": r, "n_injected_docs": 2 * n_star,
+            rows.append({"seed": seed, "arm": "adaptive", "r": r, "n_injected_docs": len(keptA2) + len(keptB2),
+                         "n_planned": 2 * n_star,
                          "q_measured": round(q_adapt, 4), "q_pred": round(q_star, 4),
                          "abs_err": round(abs(q_adapt - q_star), 4)})
             for m in per_query_metrics(inj_rows2, inj2):
                 pq_rows.append({"seed": seed, "arm": "adaptive", "r": r, **m})
-            print(f"seed {seed} r={r:.3f} fixed q={q_meas:.4f} (mech {q_mech:.4f}) | adaptive n={2*n_star} q={q_adapt:.4f} (BRC {q_star:.4f})", flush=True)
+            print(f"seed {seed} r={r:.3f} fixed q={q_meas:.4f} (mech {q_mech:.4f}) | adaptive planned={2*n_star} kept={len(keptA2)+len(keptB2)} q={q_adapt:.4f} (BRC {q_star:.4f})", flush=True)
     with open(OUTD / f"e1_{domain}.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["seed", "arm", "r", "n_injected_docs", "q_measured", "q_pred", "abs_err"])
+        w = csv.DictWriter(f, fieldnames=["seed", "arm", "r", "n_injected_docs", "n_planned", "q_measured", "q_pred", "abs_err"])
         w.writeheader()
         w.writerows(rows)
     with open(OUTD / f"e1_{domain}_perquery.csv", "w", newline="") as f:
