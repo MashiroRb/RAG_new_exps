@@ -1,0 +1,20 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  30%|██▉       | 59/199 [00:00<00:00, 543.32it/s]Loading weights:  58%|█████▊    | 116/199 [00:00<00:00, 537.53it/s]Loading weights:  85%|████████▌ | 170/199 [00:00<00:00, 534.46it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 565.96it/s]
+seed 101 abs80 frac=0.25 q=0.7864 X=0.1861 rho_implied=0.0506 rho/f=0.2023
+seed 101 abs80 frac=0.5 q=0.7227 X=0.1044 rho_implied=0.0401 rho/f=0.0801
+seed 101 abs80 frac=1.0 q=0.6432 X=0.0538 rho_implied=0.0299 rho/f=0.0299
+seed 101 scaled frac=0.25 q=0.4045 X=0.0552 rho_implied=0.0813 rho/f=0.3250
+seed 101 scaled frac=0.5 q=0.4500 X=0.0562 rho_implied=0.0687 rho/f=0.1374
+seed 101 scaled frac=1.0 q=0.6432 X=0.0538 rho_implied=0.0299 rho/f=0.0299
+seed 202 abs80 frac=0.25 q=0.7977 X=0.1855 rho_implied=0.0470 rho/f=0.1882
+seed 202 abs80 frac=0.5 q=0.7023 X=0.1029 rho_implied=0.0436 rho/f=0.0873
+seed 202 abs80 frac=1.0 q=0.5955 X=0.0553 rho_implied=0.0376 rho/f=0.0376
+seed 202 scaled frac=0.25 q=0.3182 X=0.0521 rho_implied=0.1116 rho/f=0.4463
+seed 202 scaled frac=0.5 q=0.4227 X=0.0524 rho_implied=0.0716 rho/f=0.1432
+seed 202 scaled frac=1.0 q=0.5955 X=0.0553 rho_implied=0.0376 rho/f=0.0376
+seed 303 abs80 frac=0.25 q=0.7455 X=0.1835 rho_implied=0.0627 rho/f=0.2506
+seed 303 abs80 frac=0.5 q=0.6682 X=0.1039 rho_implied=0.0516 rho/f=0.1032
+seed 303 abs80 frac=1.0 q=0.5568 X=0.0542 rho_implied=0.0431 rho/f=0.0431
+seed 303 scaled frac=0.25 q=0.4273 X=0.0539 rho_implied=0.0723 rho/f=0.2892
+seed 303 scaled frac=0.5 q=0.5432 X=0.0563 rho_implied=0.0474 rho/f=0.0947
+seed 303 scaled frac=1.0 q=0.5568 X=0.0542 rho_implied=0.0431 rho/f=0.0431
+E2 summary: {"abs80": {"rho_implied_mean": {"0.25": 0.0534, "0.5": 0.0451, "1.0": 0.0369}, "ratio_to_full": {"0.25": 1.4472, "0.5": 1.2222, "1.0": 1.0}, "rho_per_frac_mean": {"0.25": 0.2137, "0.5": 0.0902, "1.0": 0.0369}}, "scaled": {"rho_implied_mean": {"0.25": 0.0884, "0.5": 0.0626, "1.0": 0.0369}, "ratio_to_full": {"0.25": 2.3957, "0.5": 1.6965, "1.0": 1.0}, "rho_per_frac_mean": {"0.25": 0.3535, "0.5": 0.1251, "1.0": 0.0369}}}
