@@ -1,37 +1,4 @@
 {
- "e1_camera": {
-  "arm_err": {
-   "fixed": 0.03014444444444445,
-   "adaptive": 0.052777777777777785
-  },
-  "rstar": 0.8
- },
- "e1_ev": {
-  "arm_err": {
-   "fixed": 0.021547619047619045,
-   "adaptive": 0.023214285714285715
-  },
-  "rstar": 0.45
- },
- "e1_shoes": {
-  "arm_err": {
-   "fixed": 0.025766666666666663,
-   "adaptive": 0.03473333333333334
-  },
-  "rstar": 0.5
- },
- "e3_camera": {
-  "err_eq_uncapped": 0.04269166666666668,
-  "err_om_uncapped": 0.0658666666666667
- },
- "e3_ev": {
-  "err_eq_uncapped": 0.04871666666666668,
-  "err_om_uncapped": 0.03420000000000001
- },
- "e3_shoes": {
-  "err_eq_uncapped": 0.043799999999999985,
-  "err_om_uncapped": 0.049533333333333325
- },
  "e3_nsweep_camera": {
   "1": {
    "x_star": 32.0,

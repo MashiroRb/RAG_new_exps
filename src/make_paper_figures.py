@@ -1,5 +1,6 @@
 import csv
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -8,22 +9,23 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from replay_lib import solve_brc_q
+
 ROOT = Path(__file__).resolve().parents[2]
 R = ROOT / "RAG_new_exps" / "results"
 FIGD = ROOT / "paper" / "acl" / "figures"
 FIGD.mkdir(parents=True, exist_ok=True)
 DOMAINS = ("camera", "ev", "shoes")
+RHO = {"camera": 0.3336, "ev": 0.9188, "shoes": 0.8391}
+RSTAR = {"camera": 0.800, "ev": 0.448, "shoes": 0.497}
+OMEGA_STAR = {"camera": 0.148, "ev": 1.126, "shoes": 0.939}
+QBAR = 0.3
 
 plt.rcParams.update({
     "font.family": "serif",
     "font.serif": ["Nimbus Roman", "STIXGeneral", "DejaVu Serif"],
     "mathtext.fontset": "stix",
-    "font.size": 11.5,
-    "axes.titlesize": 13.5,
-    "axes.labelsize": 13,
-    "xtick.labelsize": 11,
-    "ytick.labelsize": 11,
-    "legend.fontsize": 10.5,
     "axes.linewidth": 1.0,
     "xtick.direction": "out",
     "ytick.direction": "out",
@@ -33,118 +35,171 @@ BLUE = "#4682B4"
 ORANGE = "#E1812C"
 
 
-def seed_means(rows, key_fields, val_field):
+def seed_stats(rows, key_fields, val_field):
     agg = defaultdict(list)
     for r in rows:
         agg[tuple(r[k] for k in key_fields)].append(float(r[val_field]))
-    return {k: float(np.mean(v)) for k, v in agg.items()}
+    keys = sorted(agg, key=lambda k: float(k[-1]))
+    xs = np.array([float(k[-1]) for k in keys])
+    means = np.array([np.mean(agg[k]) for k in keys])
+    stds = np.array([np.std(agg[k], ddof=1) if len(agg[k]) > 1 else 0.0 for k in keys])
+    return xs, means, stds
 
 
-def style_axis(ax, title):
-    ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(0.0, 1.0)
-    ax.set_xticks(np.arange(0.0, 1.01, 0.2))
-    ax.set_yticks(np.arange(0.0, 1.01, 0.2))
-    ax.plot([0, 1], [0, 1], ls=(0, (6, 3)), color="black", lw=2.0, zorder=1,
-            label="Ideal fit")
+def base_axis(ax, xlabel, ylabel, title):
     ax.grid(True, ls=":", lw=0.6, color="gray", alpha=0.55)
     ax.set_axisbelow(True)
-    ax.set_title(title, pad=9)
+    ax.set_xlabel(xlabel, fontsize=12.5)
+    if ylabel:
+        ax.set_ylabel(ylabel, fontsize=12.5)
+    ax.set_title(title, fontsize=12.5, pad=7)
+    ax.tick_params(labelsize=11)
 
 
-def stats_box(ax, text):
-    ax.text(0.035, 0.965, text, transform=ax.transAxes, va="top", ha="left",
-            fontsize=11.5, linespacing=1.45,
-            bbox=dict(boxstyle="round,pad=0.45", facecolor="white",
-                      edgecolor="black", lw=1.0))
-
-
-def legend_box(ax, loc):
-    leg = ax.legend(loc=loc, frameon=True, framealpha=1.0, fancybox=False,
-                    edgecolor="black", handlelength=2.2, borderpad=0.55,
-                    labelspacing=0.45)
+def e1_panel(ax, dom, rows):
+    rho = RHO[dom]
+    rstar = RSTAR[dom]
+    rs, fm, fs = seed_stats([r for r in rows if r["arm"] == "fixed"], ["r"], "q_measured")
+    _, sm, ss = seed_stats([r for r in rows if r["arm"] == "adaptive"], ["r"], "q_measured")
+    ax.errorbar(rs, fm, yerr=fs, fmt="o", color=BLUE, ms=5.5, mec="white", mew=0.6,
+                elinewidth=1.0, capsize=2.5, label="Fixed (measured)", zorder=3)
+    ax.errorbar(rs, sm, yerr=ss, fmt="s", color=ORANGE, ms=5, mec="white", mew=0.6,
+                elinewidth=1.0, capsize=2.5, label="Strategic (measured)", zorder=3)
+    rr = np.linspace(0, 0.95, 200)
+    eta = 1 - rr
+    X = 80 / 176
+    ax.plot(rr, eta * X / (eta * X + rho), ls="--", color="black", lw=1.7,
+            label="Fixed (model)", zorder=2)
+    ax.plot(rr, [solve_brc_q(1 - r, 1.0, 2, rho) for r in rr], ls="-.", color="black",
+            lw=1.7, label="Strategic (model)", zorder=2)
+    ax.axhline(QBAR, ls=":", color="gray", lw=1.2, zorder=1)
+    ax.text(0.985, QBAR + 0.02, r"$\bar q=0.3$", ha="right", va="bottom",
+            fontsize=10, color="dimgray")
+    ax.axvline(rstar, ls=":", color="gray", lw=1.2, zorder=1)
+    ax.text(rstar - 0.02, 0.03, r"$r^\star$", ha="right", va="bottom",
+            fontsize=11, color="dimgray")
+    fixed_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "fixed"])
+    strat_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "adaptive"])
+    ax.text(0.972, 0.966, f"MAE fixed $= {fixed_err:.3f}$\nMAE strat. $= {strat_err:.3f}$",
+            transform=ax.transAxes, va="top", ha="right", fontsize=9.5, linespacing=1.4,
+            bbox=dict(boxstyle="round,pad=0.4", facecolor="white", edgecolor="black",
+                      lw=0.9))
+    ax.set_xlim(-0.02, 1.0)
+    ax.set_ylim(0, 1.0)
+    ax.set_xticks(np.arange(0, 1.01, 0.2))
+    base_axis(ax, "Filter strength $r$", "Exposure $q$" if dom == "camera" else "",
+              f"{dom} ($\\hat\\rho={rho:.3f}$)")
+    leg = ax.legend(loc="lower left", frameon=True, framealpha=1.0, fancybox=False,
+                    edgecolor="black", fontsize=9, handlelength=2.0, borderpad=0.45,
+                    labelspacing=0.4)
     leg.get_frame().set_linewidth(0.9)
 
 
-def e1_figures(stats):
-    for dom in DOMAINS:
+def e1_figures():
+    fig, axes = plt.subplots(1, 3, figsize=(9.9, 3.4))
+    for ax, dom in zip(axes, DOMAINS):
         rows = list(csv.DictReader(open(R / "e1" / f"e1_{dom}.csv")))
-        fit = json.load(open(R / "e0" / f"e0_fit_{dom}.json"))
-        fig, ax = plt.subplots(figsize=(4.3, 3.9))
-        arms = [("fixed", BLUE, "o", "Fixed injection"),
-                ("adaptive", ORANGE, "s", "Strategic injection")]
-        arm_err = {}
-        for arm, col, mk, lab in arms:
-            sel = [r for r in rows if r["arm"] == arm]
-            arm_err[arm] = float(np.mean([float(r["abs_err"]) for r in sel]))
-            ax.scatter([float(r["q_measured"]) for r in sel],
-                       [float(r["q_pred"]) for r in sel],
-                       s=42, marker=mk, facecolor=col, edgecolor="white",
-                       linewidth=0.6, alpha=0.92, zorder=3, label=lab)
-        rstar = {"camera": 0.80, "ev": 0.45, "shoes": 0.50}[dom]
-        stats_box(ax, f"$\\hat\\rho = {fit['rho_hat']:.3f}$\n"
-                      f"$r^\\star = {rstar:.2f}$\n"
-                      f"MAE fixed $= {arm_err['fixed']:.3f}$\n"
-                      f"MAE strat. $= {arm_err['adaptive']:.3f}$")
-        style_axis(ax, f"FAISS/Dense Filtering Response ({dom})")
-        ax.set_xlabel("Observed exposure $q$")
-        ax.set_ylabel("Model-predicted exposure $\\hat{q}$")
-        legend_box(ax, "lower right")
-        fig.tight_layout()
-        fig.savefig(FIGD / f"e1_filtering_{dom}.pdf")
-        plt.close(fig)
-        stats[f"e1_{dom}"] = {"arm_err": arm_err, "rstar": rstar}
+        e1_panel(ax, dom, rows)
+    fig.tight_layout(w_pad=1.4)
+    fig.savefig(FIGD / "e1_filtering_panels.pdf", bbox_inches="tight")
+    plt.close(fig)
 
 
-def e3_figures(stats):
-    for dom in DOMAINS:
-        rows = list(csv.DictReader(open(R / "e3" / f"e3_{dom}.csv")))
-        fig, ax = plt.subplots(figsize=(4.3, 3.9))
-        eq = [r for r in rows if r["arm"] == "equilibrium_w*"]
-        om = [r for r in rows if r["arm"].startswith("omega_")]
-        capped_err = []
-        for rows_, col, mk, lab in [(eq, BLUE, "o", "Equilibrium ($N$-sweep)"),
-                                    (om, ORANGE, "s", "Benefit-ratio sweep")]:
-            cap_x, cap_y, unc_x, unc_y = [], [], [], []
-            for r in rows_:
-                is_cap = r.get("capped") == "1"
-                tgt = cap_x if is_cap else unc_x
-                tgt2 = cap_y if is_cap else unc_y
-                tgt.append(float(r["q_measured"]))
-                tgt2.append(float(r["q_pred"]))
-                if is_cap:
-                    capped_err.append(abs(float(r["q_measured"]) - float(r["q_pred"])))
-            ax.scatter(unc_x, unc_y, s=42, marker=mk, facecolor=col,
-                       edgecolor="white", linewidth=0.6, alpha=0.92,
-                       zorder=3, label=lab)
-            if cap_x:
-                lab = "Capped (pool limit)" if not hasattr(e3_figures, "_cap_labeled") else None
-                e3_figures._cap_labeled = True
-                ax.scatter(cap_x, cap_y, s=46, marker=mk, facecolor="white",
-                           edgecolor=col, linewidth=1.2, alpha=0.95,
-                           zorder=3, label=lab)
-        err_eq = float(np.mean([abs(float(r["q_measured"]) - float(r["q_pred"]))
-                                for r in eq if r.get("capped") != "1"]))
-        err_om = float(np.mean([abs(float(r["q_measured"]) - float(r["q_pred"]))
-                                for r in om if r.get("capped") != "1"]))
-        om_star = {"camera": 0.148, "ev": 1.126, "shoes": 0.939}[dom]
-        stats_box(ax, f"$\\omega^\\star = {om_star:.3f}$\n"
-                      f"MAE $N$-sweep $= {err_eq:.3f}$\n"
-                      f"MAE $\\omega$-sweep $= {err_om:.3f}$")
-        style_axis(ax, f"FAISS/Dense Provider Competition ({dom})")
-        ax.set_xlabel("Observed exposure $q$")
-        ax.set_ylabel("Model-predicted exposure $\\hat{q}$")
-        legend_box(ax, "lower right")
-        fig.tight_layout()
-        fig.savefig(FIGD / f"e3_nstatic_{dom}.pdf")
+def e3_panel(ax, dom, rows, col, legend_here=False):
+    if col == "N":
+        sel = [r for r in rows if r["arm"] == "equilibrium_w*"]
+        xs, meas, stds = seed_stats(sel, ["N"], "q_measured")
+        _, pred, _ = seed_stats(sel, ["N"], "q_pred")
+        capped = {int(float(r["N"])): r.get("capped") == "1"
+                  for r in sel if r.get("capped") is not None}
+        ax.plot(xs, pred, ls="--", color="black", lw=1.7, zorder=2)
+        for x, m, s in zip(xs, meas, stds):
+            if capped.get(int(x)):
+                ax.errorbar([x], [m], yerr=[s], fmt="o", ms=6, mec=BLUE, mew=1.3,
+                            color="white", elinewidth=1.0, capsize=2.5, zorder=3)
+            else:
+                ax.errorbar([x], [m], yerr=[s], fmt="o", color=BLUE, ms=5.5,
+                            mec="white", mew=0.6, elinewidth=1.0, capsize=2.5, zorder=3)
+        ax.plot([], [], ls="--", color="black", lw=1.7, label=r"Model $q^\star$")
+        ax.errorbar([], [], fmt="o", color=BLUE, ms=5.5, mec="white", mew=0.6,
+                    label="Measured")
+        if any(capped.get(int(x), False) for x in xs):
+            ax.errorbar([], [], fmt="o", ms=6, mec=BLUE, mew=1.3, color="white",
+                        label="Capped (pool limit)")
+        ax.set_xticks([1, 2, 4, 8])
+        if legend_here:
+            from matplotlib.lines import Line2D
+            colr, mk = (BLUE, "o") if col == "N" else (ORANGE, "s")
+            hs = [Line2D([], [], ls="--", color="black", lw=1.7, label=r"Model $q^\star$"),
+                  Line2D([], [], ls="none", marker=mk, color=colr, ms=5.5,
+                         mec="white", mew=0.6, label="Measured"),
+                  Line2D([], [], ls="none", marker=mk, color="white", mec=colr,
+                         mew=1.3, ms=6, label="Capped (pool limit)")]
+            ax.legend(handles=hs, loc="lower right", frameon=True, framealpha=1.0,
+                      fancybox=False, edgecolor="black", fontsize=8.5,
+                      handlelength=1.8, borderpad=0.4, labelspacing=0.35)
+        ax.set_xticklabels(["1", "2", "4", "8"])
+        ax.set_xlabel("Providers $N$", fontsize=12.5)
+        err = np.mean([abs(float(r["q_measured"]) - float(r["q_pred"]))
+                       for r in sel if r.get("capped") != "1"])
+        ax.text(0.035, 0.965, f"MAE $= {err:.3f}$", transform=ax.transAxes, va="top",
+                ha="left", fontsize=10,
+                bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
+                          edgecolor="black", lw=0.9))
+        base_axis(ax, "", "Exposure $q$", f"{dom}")
+    else:
+        sel = [r for r in rows if r["arm"].startswith("omega_")]
+        agg, pred, capped = defaultdict(list), {}, {}
+        for r in sel:
+            w = float(r["arm"].split("_")[1])
+            agg[w].append(float(r["q_measured"]))
+            pred[w] = float(r["q_pred"])
+            capped[w] = r.get("capped") == "1"
+        ws = sorted(agg)
+        meas = np.array([np.mean(agg[w]) for w in ws])
+        stds = np.array([np.std(agg[w], ddof=1) for w in ws])
+        pv = np.array([pred[w] for w in ws])
+        ax.plot(ws, pv, ls="--", color="black", lw=1.7, zorder=2)
+        for w, m, s in zip(ws, meas, stds):
+            if capped.get(w):
+                ax.errorbar([w], [m], yerr=[s], fmt="s", ms=5.5, mec=ORANGE, mew=1.3,
+                            color="white", elinewidth=1.0, capsize=2.5, zorder=3)
+            else:
+                ax.errorbar([w], [m], yerr=[s], fmt="s", color=ORANGE, ms=5,
+                            mec="white", mew=0.6, elinewidth=1.0, capsize=2.5, zorder=3)
+        ax.set_xticks(ws)
+        ax.set_xticklabels([str(w) for w in ws])
+        ax.set_xlabel(r"Benefit ratio $\omega$", fontsize=12.5)
+        if legend_here:
+            from matplotlib.lines import Line2D
+            hs = [Line2D([], [], ls="--", color="black", lw=1.7, label=r"Model $q^\star$"),
+                  Line2D([], [], ls="none", marker="s", color=ORANGE, ms=5,
+                         mec="white", mew=0.6, label="Measured"),
+                  Line2D([], [], ls="none", marker="s", color="white", mec=ORANGE,
+                         mew=1.3, ms=5.5, label="Capped (pool limit)")]
+            ax.legend(handles=hs, loc="lower right", frameon=True, framealpha=1.0,
+                      fancybox=False, edgecolor="black", fontsize=8.5,
+                      handlelength=1.8, borderpad=0.4, labelspacing=0.35)
+        base_axis(ax, "", "", "")
+
+
+def e3_figures():
+    for col, fname in [("N", "e3_nsweep_column.pdf"), ("omega", "e3_omega_column.pdf")]:
+        fig, axes = plt.subplots(3, 1, figsize=(3.15, 6.9))
+        for i, (ax, dom) in enumerate(zip(axes, DOMAINS)):
+            rows = list(csv.DictReader(open(R / "e3" / f"e3_{dom}.csv")))
+            e3_panel(ax, dom, rows, col, legend_here=(i == 0))
+        if axes[0].get_legend() is not None:
+            axes[0].get_legend().get_frame().set_linewidth(0.9)
+        fig.tight_layout(h_pad=1.5)
+        fig.savefig(FIGD / fname, bbox_inches="tight")
         plt.close(fig)
-        stats[f"e3_{dom}"] = {"err_eq_uncapped": err_eq, "err_om_uncapped": err_om}
 
 
 def main():
+    e1_figures()
+    e3_figures()
     stats = {}
-    e1_figures(stats)
-    e3_figures(stats)
     for dom in DOMAINS:
         eq = [r for r in csv.DictReader(open(R / "e3" / f"e3_{dom}.csv"))
               if r["arm"] == "equilibrium_w*"]
@@ -158,10 +213,9 @@ def main():
                 "q_pred": float(np.mean([c for _, _, c, _ in v])),
                 "capped": all(d for _, _, _, d in v)}
             for N, v in sorted(agg.items())}
-    out = R / "paper_fig_stats.json"
-    with open(out, "w") as f:
+    with open(R / "paper_fig_stats.json", "w") as f:
         json.dump(stats, f, indent=1)
-    print(json.dumps(stats, indent=1))
+    print("figures written")
 
 
 if __name__ == "__main__":
