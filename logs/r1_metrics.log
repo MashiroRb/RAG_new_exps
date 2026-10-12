@@ -1,0 +1,10 @@
+{'subset': 'all', 'metric': 'q_run', 'auc_pooled': 0.7654, 'auc_seed_mean': 0.7653, 'auc_seed_std': 0.0183, 'ci95_lo': 0.7509, 'ci95_hi': 0.7789, 'spearman_mean': 0.4404}
+{'subset': 'all', 'metric': 'hit', 'auc_pooled': 0.6252, 'auc_seed_mean': 0.6255, 'auc_seed_std': 0.0123, 'ci95_lo': 0.6151, 'ci95_hi': 0.6348, 'spearman_mean': 0.4046}
+{'subset': 'all', 'metric': 'k_q', 'auc_pooled': 0.7654, 'auc_seed_mean': 0.7653, 'auc_seed_std': 0.0183, 'ci95_lo': 0.7509, 'ci95_hi': 0.7789, 'spearman_mean': 0.4404}
+{'subset': 'all', 'metric': 'rr_weighted', 'auc_pooled': 0.7876, 'auc_seed_mean': 0.7873, 'auc_seed_std': 0.0184, 'ci95_lo': 0.7737, 'ci95_hi': 0.8009, 'spearman_mean': 0.4743}
+{'subset': 'all', 'metric': 'score_weighted', 'auc_pooled': 0.7794, 'auc_seed_mean': 0.7792, 'auc_seed_std': 0.0171, 'ci95_lo': 0.7655, 'ci95_hi': 0.7924, 'spearman_mean': 0.4612}
+{'subset': 'positive_injection_only', 'metric': 'q_run', 'auc_pooled': 0.7358, 'auc_seed_mean': 0.7356, 'auc_seed_std': 0.0219, 'ci95_lo': 0.7201, 'ci95_hi': 0.7504, 'spearman_mean': 0.3831}
+{'subset': 'positive_injection_only', 'metric': 'hit', 'auc_pooled': 0.5745, 'auc_seed_mean': 0.5748, 'auc_seed_std': 0.0093, 'ci95_lo': 0.5658, 'ci95_hi': 0.5833, 'spearman_mean': 0.316}
+{'subset': 'positive_injection_only', 'metric': 'k_q', 'auc_pooled': 0.7358, 'auc_seed_mean': 0.7356, 'auc_seed_std': 0.0219, 'ci95_lo': 0.7201, 'ci95_hi': 0.7504, 'spearman_mean': 0.3831}
+{'subset': 'positive_injection_only', 'metric': 'rr_weighted', 'auc_pooled': 0.7615, 'auc_seed_mean': 0.7609, 'auc_seed_std': 0.0219, 'ci95_lo': 0.7461, 'ci95_hi': 0.776, 'spearman_mean': 0.4216}
+{'subset': 'positive_injection_only', 'metric': 'score_weighted', 'auc_pooled': 0.752, 'auc_seed_mean': 0.7516, 'auc_seed_std': 0.0204, 'ci95_lo': 0.7368, 'ci95_hi': 0.766, 'spearman_mean': 0.4067}
