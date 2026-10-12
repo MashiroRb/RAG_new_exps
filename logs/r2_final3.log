@@ -1,0 +1,5 @@
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  85%|████████▌ | 170/199 [00:00<00:00, 1216.41it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 1391.27it/s]
+camera chunked 250 docs
+camera chunked 500 docs
+camera chunked 750 docs
+camera chunked 1000 docs
