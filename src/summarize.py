@@ -30,8 +30,8 @@ def main():
     lines += ["## E0 calibration (camera)", f"- rho_hat = {fit['rho_hat']}, R2 = {fit['r2']}, MAE = {fit['mae']}, RMSE = {fit['rmse']} (n={fit['n_points']})", ""]
     fig, ax = plt.subplots(figsize=(6.0, 4.0))
     pts = mean_by(e0, ["X"], "exposure")
-    xs = sorted(pts)
-    ax.plot(xs, [pts[x] for x in xs], "o", ms=4, label="measured (3-seed mean)")
+    xs = sorted(float(k[0]) for k in pts)
+    ax.plot(xs, [pts[(str(x),) if False else k] for k, x in zip(sorted(pts), xs)], "o", ms=4, label="measured (3-seed mean)")
     xr = np.linspace(0, max(xs), 100)
     ax.plot(xr, xr / (xr + fit["rho_hat"]), "-", lw=1.2, label=f"model q=X/(X+{fit['rho_hat']})")
     ax.axhline(0.3, ls=":", lw=1, color="gray")
@@ -46,9 +46,9 @@ def main():
         for arm, marker in [("fixed", "o"), ("adaptive", "s")]:
             pts = mean_by([r for r in e1 if r["arm"] == arm], ["r"], "q_measured")
             prd = mean_by([r for r in e1 if r["arm"] == arm], ["r"], "q_pred")
-            rs = sorted(pts, key=lambda t: float(t[0]))
-            ax.plot([float(r) for r in rs], [pts[r] for r in rs], marker=marker, ms=5, lw=1.4, label=f"measured ({arm})")
-            ax.plot([float(r) for r in rs], [prd[r] for r in rs], ls="--", lw=1.1, label=f"model ({arm})")
+            rs = sorted(float(t[0]) for t in pts)
+            ax.plot(rs, [pts[(str(v),)] for v in rs], marker=marker, ms=5, lw=1.4, label=f"measured ({arm})")
+            ax.plot(rs, [prd[(str(v),)] for v in rs], ls="--", lw=1.1, label=f"model ({arm})")
         ax.axhline(0.3, ls=":", lw=1, color="gray")
         ax.set_xlabel("filtering recall r"); ax.set_ylabel("exposure q")
         ax.set_title("E1: fixed vs adaptive injection (N=2)")
@@ -57,9 +57,9 @@ def main():
         fixed_err = np.mean([float(r["abs_err"]) for r in e1 if r["arm"] == "fixed"])
         adapt_err = np.mean([float(r["abs_err"]) for r in e1 if r["arm"] == "adaptive"])
         gaps = []
-        for r in sorted(set(x["r"] for x in e1)):
-            f_ = [float(x["q_measured"]) for x in e1 if x["arm"] == "fixed" and x["r"] == r]
-            a_ = [float(x["q_measured"]) for x in e1 if x["arm"] == "adaptive" and x["r"] == r]
+        for r in sorted(set(float(x["r"]) for x in e1)):
+            f_ = [float(x["q_measured"]) for x in e1 if x["arm"] == "fixed" and abs(float(x["r"]) - r) < 1e-9]
+            a_ = [float(x["q_measured"]) for x in e1 if x["arm"] == "adaptive" and abs(float(x["r"]) - r) < 1e-9]
             if f_ and a_:
                 gaps.append((float(r), float(np.mean(a_) - np.mean(f_))))
         lines += ["## E1 filtering response", f"- mean |q-meas − model|: fixed={fixed_err:.4f}, adaptive={adapt_err:.4f}",
@@ -69,8 +69,12 @@ def main():
 
     try:
         s2 = json.load(open(R / "e2" / "e2_camera_summary.json"))
-        lines += ["## E2 authentic-mass lever", f"- rho_implied by corpus fraction: {s2['rho_implied_mean']}",
-                  f"- ratio to full corpus: {s2['ratio_to_full']}", ""]
+        lines += ["## E2 authentic-mass lever"]
+        for arm in ("abs80", "scaled"):
+            if arm in s2:
+                lines.append(f"- {arm}: rho_implied by corpus fraction {s2[arm]['rho_implied_mean']}, "
+                             f"ratio to full {s2[arm]['ratio_to_full']}, rho/f constancy {s2[arm]['rho_per_frac_mean']}")
+        lines.append("")
     except FileNotFoundError:
         lines += ["## E2 authentic-mass lever", "- MISSING", ""]
 
@@ -93,10 +97,13 @@ def main():
                     lines.append(f"- {tag} N={N}: x*/provider={v[0]:.1f} docs, total={v[1]:.1f} docs, "
                                  f"q_meas={v[2]:.3f} vs q0={v[3]:.3f}{cap}")
         if om:
-            lines += ["- omega sweep (N=2, cap-clamped where x* exceeds pool):"]
-            for r in om:
-                cap = " (cap-binding)" if r.get("capped") == "1" else ""
-                lines.append(f"  - omega={r['arm'].split('_')[1]}: x*={r['x_star_docs']} q_meas={r['q_measured']} vs q0={r['q_pred']}{cap}")
+            lines += ["- omega sweep (N=2, cap-clamped where x* exceeds pool), 3-seed means:"]
+            for w in sorted(set(r["arm"].split("_")[1] for r in om)):
+                sel = [r for r in om if r["arm"].split("_")[1] == w]
+                cap = " (cap-binding)" if sum(r.get("capped") == "1" for r in sel) else ""
+                lines.append(f"  - omega={w}: x*={float(np.mean([float(r['x_star_docs']) for r in sel])):.0f} "
+                             f"q_meas={float(np.mean([float(r['q_measured']) for r in sel])):.3f} "
+                             f"vs q0={float(np.mean([float(r['q_pred']) for r in sel])):.3f}{cap}")
         if asym:
             sh = np.mean([[float(r["share_lowcost"]), float(r["share_highcost"])] for r in asym], axis=0)
             lines += [f"- asymmetric (cost 0.5 vs 2.0): measured exposure shares = {sh[0]:.2f} vs {sh[1]:.2f} (low-cost provider takes the larger share)", ""]
