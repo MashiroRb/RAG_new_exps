@@ -65,18 +65,31 @@ def observed_injected(seed_json, count):
     return sorted(sem), sorted(sim)
 
 
+_VEC_CACHE_PATH = ROOT / "RAG_new_exps" / "results" / "cache" / "vec_cache.pkl"
+
+
 class Embedder:
     def __init__(self, model_id="BAAI/bge-small-en-v1.5", pooling="mean", batch_size=64):
+        import hashlib
+        import pickle
         import torch
         from transformers import AutoModel, AutoTokenizer
+        self.hashlib = hashlib
+        self.pickle = pickle
         self.torch = torch
         self.device = "cpu"
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
         self.model = AutoModel.from_pretrained(model_id).to(self.device).eval()
         self.pooling = pooling
         self.batch_size = batch_size
+        _VEC_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        self.cache = {}
+        if _VEC_CACHE_PATH.exists():
+            with open(_VEC_CACHE_PATH, "rb") as f:
+                self.cache = pickle.load(f)
+        self._new = 0
 
-    def encode(self, texts):
+    def _encode_raw(self, texts):
         out = []
         torch = self.torch
         with torch.no_grad():
@@ -92,6 +105,25 @@ class Embedder:
                 v = torch.nn.functional.normalize(v, p=2, dim=1)
                 out.append(v.cpu().numpy().astype(np.float32))
         return np.vstack(out) if out else np.zeros((0, 384), dtype=np.float32)
+
+    def encode(self, texts):
+        if not texts:
+            return np.zeros((0, 384), dtype=np.float32)
+        keys = [self.hashlib.md5(t.encode("utf-8")).hexdigest() for t in texts]
+        miss = [i for i, k in enumerate(keys) if k not in self.cache]
+        if miss:
+            vecs = self._encode_raw([texts[i] for i in miss])
+            for i, k in enumerate(miss):
+                self.cache[keys[k]] = vecs[i]
+            self._new += len(miss)
+            if self._new >= 512:
+                self.flush()
+        return np.vstack([self.cache[k] for k in keys])
+
+    def flush(self):
+        with open(_VEC_CACHE_PATH, "wb") as f:
+            self.pickle.dump(self.cache, f)
+        self._new = 0
 
 
 class FlatIndex:
