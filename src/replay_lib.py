@@ -120,3 +120,66 @@ def retrieve_blocks(corpus_recs, injected_recs, queries, embedder, chunk_fn, k=1
     qvecs = embedder.encode(queries)
     d, i = idx.search(qvecs, k)
     return nodes, d, i
+
+
+def chunk_texts(texts, size=512, overlap=64):
+    from llama_index.core.node_parser import SentenceSplitter
+    sp = SentenceSplitter(chunk_size=size, chunk_overlap=overlap)
+    out = []
+    for t in texts:
+        out.extend(sp.split_text(t))
+    return out
+
+
+def nodes_of(recs):
+    nodes = []
+    for rec in recs:
+        for ch in chunk_texts([format_text(rec)]):
+            nodes.append((rec["_source"], rec["_line"], ch))
+    return nodes
+
+
+class VecCache:
+    def __init__(self, embedder):
+        self.embedder = embedder
+        self.map = {}
+
+    def vecs_for(self, texts):
+        miss = [t for t in texts if t not in self.map]
+        if miss:
+            vs = self.embedder.encode(miss)
+            for t, v in zip(miss, vs):
+                self.map[t] = v
+        import numpy as np
+        return np.vstack([self.map[t] for t in texts])
+
+
+def build_index(node_list, cache):
+    import faiss
+    mat = cache.vecs_for([t for _, _, t in node_list])
+    index = faiss.IndexFlatL2(mat.shape[1])
+    index.add(mat)
+    return index, len(node_list)
+
+
+def exposure_of(index, base_n, qvecs, k=10):
+    d, i = index.search(qvecs, k)
+    counts = [(row >= base_n).sum() for row in i]
+    inj_rows = []
+    for row in i:
+        inj_rows.append([(int(j), j >= base_n) for j in row])
+    return sum(counts) / (len(counts) * k), inj_rows
+
+
+def solve_brc_q(eta, omega, N, rho):
+    from scipy.optimize import brentq
+    f = lambda q: omega * eta * eta * (1 - q) ** 2 * (N - q) - q * rho * rho
+    if f(1e-12) <= 0:
+        return 0.0
+    return brentq(f, 1e-12, 1 - 1e-12, xtol=1e-14)
+
+
+def r_star(omega, N, rho, qbar):
+    import numpy as np
+    eta = rho * np.sqrt(qbar) / ((1 - qbar) * np.sqrt(omega * (N - qbar)))
+    return 1.0 - eta
