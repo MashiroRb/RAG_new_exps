@@ -76,7 +76,7 @@ def e1_panel(ax, dom, rows):
     ax.text(0.985, QBAR + 0.02, r"$\bar q=0.3$", ha="right", va="bottom",
             fontsize=10, color="dimgray")
     ax.axvline(rstar, ls=":", color="gray", lw=1.2, zorder=1)
-    ax.text(rstar - 0.02, 0.03, r"$r^\star$", ha="right", va="bottom",
+    ax.text(rstar + 0.02, 0.03, r"$r^\star$", ha="left", va="bottom",
             fontsize=11, color="dimgray")
     fixed_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "fixed"])
     strat_err = np.mean([float(r["abs_err"]) for r in rows if r["arm"] == "adaptive"])
@@ -90,8 +90,9 @@ def e1_panel(ax, dom, rows):
     base_axis(ax, "Filter strength $r$", "Exposure $q$" if dom == "camera" else "",
               f"{dom} ($\\hat\\rho={rho:.3f}$)")
     leg = ax.legend(loc="lower left", frameon=True, framealpha=1.0, fancybox=False,
-                    edgecolor="black", fontsize=9, handlelength=2.0, borderpad=0.45,
-                    labelspacing=0.4)
+                    edgecolor="black", fontsize=7.6, handlelength=1.3,
+                    borderpad=0.32, labelspacing=0.26, ncol=2, columnspacing=0.55,
+                    handletextpad=0.4)
     leg.get_frame().set_linewidth(0.9)
 
 
